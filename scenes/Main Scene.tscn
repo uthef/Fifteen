@@ -1,0 +1,101 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://scripts/Controller.cs" type="Script" id=2]
+[ext_resource path="res://scripts/MainScene.cs" type="Script" id=4]
+[ext_resource path="res://themes/uiFont.tres" type="Theme" id=5]
+[ext_resource path="res://sprites/play_icon_stroked.png" type="Texture" id=6]
+[ext_resource path="res://sprites/play_icon.png" type="Texture" id=7]
+[ext_resource path="res://sprites/play_icon_disabled.png" type="Texture" id=8]
+[ext_resource path="res://themes/uiBigger.tres" type="Theme" id=9]
+[ext_resource path="res://audio/impact.wav" type="AudioStream" id=10]
+[ext_resource path="res://audio/click.wav" type="AudioStream" id=11]
+
+[node name="Main Scene" type="Node"]
+script = ExtResource( 4 )
+
+[node name="InteractiveArea" type="Node2D" parent="."]
+
+[node name="BlockGroup" type="Node2D" parent="InteractiveArea"]
+
+[node name="CellGroup" type="Node2D" parent="InteractiveArea"]
+
+[node name="BlockAnimator" type="Tween" parent="."]
+playback_speed = 2.0
+playback/speed = 2.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource( 2 )
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+margin_left = 30.0
+margin_top = 50.0
+margin_right = -30.0
+
+[node name="Time" type="Label" parent="CanvasLayer/VBox"]
+margin_right = 660.0
+margin_bottom = 46.0
+theme = ExtResource( 5 )
+text = "00:00:00.00"
+align = 1
+valign = 1
+
+[node name="Moves" type="Label" parent="CanvasLayer/VBox"]
+margin_top = 50.0
+margin_right = 660.0
+margin_bottom = 111.0
+theme = ExtResource( 9 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 30.0
+margin_right = -30.0
+margin_bottom = -50.0
+grow_vertical = 0
+
+[node name="MoveLeftButton" type="TextureButton" parent="CanvasLayer/HBox"]
+margin_right = 92.0
+margin_bottom = 92.0
+rect_pivot_offset = Vector2( -1723, -849 )
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 7 )
+texture_disabled = ExtResource( 8 )
+flip_h = true
+
+[node name="DimensionLabel" type="Label" parent="CanvasLayer/HBox"]
+margin_left = 96.0
+margin_right = 564.0
+margin_bottom = 92.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 5 )
+text = "3 x 3"
+align = 1
+valign = 1
+
+[node name="MoveRightButton" type="TextureButton" parent="CanvasLayer/HBox"]
+margin_left = 568.0
+margin_right = 660.0
+margin_bottom = 92.0
+rect_pivot_offset = Vector2( -1723, -849 )
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 7 )
+texture_disabled = ExtResource( 8 )
+stretch_mode = 3
+
+[node name="ImpactPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+bus = "MainBus"
+
+[node name="ClickPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+bus = "MainBus"
+
+[connection signal="tween_completed" from="BlockAnimator" to="." method="BlockAnimatorCompleted"]
+[connection signal="button_down" from="CanvasLayer/HBox/MoveLeftButton" to="CanvasLayer" method="MoveLeftButtonPressed"]
+[connection signal="button_down" from="CanvasLayer/HBox/MoveRightButton" to="CanvasLayer" method="MoveRightButtonPressed"]

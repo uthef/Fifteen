@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="Cell" type="ReferenceRect"]
+margin_right = 128.0
+margin_bottom = 128.0
+mouse_filter = 2
+border_color = Color( 1, 1, 1, 1 )
+border_width = 6.0
+editor_only = false
