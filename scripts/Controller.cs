@@ -111,7 +111,7 @@ public class Controller : CanvasLayer
             if (GridHeight == GridWidth) GridHeight = --GridWidth + GridHeightMaxDiff;
             else GridHeight--;
             PauseTimer(true);
-            GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight);
+            GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight, true);
             _clickPlayer.Play();
         }
 
@@ -132,5 +132,18 @@ public class Controller : CanvasLayer
 
         _moveLeftButton.Disabled = false;
         if (_height == MaxGridWidth + GridHeightMaxDiff) _moveRightButton.Disabled = true;
+    }
+    
+    public override void _Notification(int notification)
+    {
+        switch (notification)
+        {
+            case NotificationWmFocusOut:
+                if (TimerActive) PauseTimer();
+                break;
+            case NotificationWmFocusIn:
+                if (Moves > 0) StartTimer();
+                break;
+        }
     }
 }

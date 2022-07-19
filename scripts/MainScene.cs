@@ -12,10 +12,11 @@ public class MainScene : Node
 	private PackedScene _blockScene;
 
 	private Node2D _cellGroup, _blockGroup;
-	private Tween _blockAnimator;
+	private Tween _tween;
 	private Controller _controller;
 	private Node2D _interactiveArea;
 	private AudioStreamPlayer _impactPlayer;
+	private AnimationPlayer _animationPlayer;
 
 	private Block[,] _blocks = new Block[0, 0];
 	private float _borderWidth;
@@ -30,31 +31,30 @@ public class MainScene : Node
 		
 		_cellGroup = GetNode<Node2D>("InteractiveArea/CellGroup");
 		_blockGroup = GetNode<Node2D>("InteractiveArea/BlockGroup");
-		_blockAnimator = GetNode<Tween>("BlockAnimator");
+		_tween = GetNode<Tween>("Tween");
 		_controller = GetNode<Controller>("CanvasLayer");
 		_interactiveArea = GetNode<Node2D>("InteractiveArea");
 		_impactPlayer = GetNode<AudioStreamPlayer>("ImpactPlayer");
-		
+		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
 		GenerateField(_controller.GridWidth, _controller.GridHeight);
 	}
 
-	public void GenerateField(int width, int height)
+	public void GenerateField(int width, int height, bool reverseAnimation = false)
 	{
-		_gameActive = false;
-
 		if (_blocks.Length != 0)
 		{
+			_gameActive = false;
 			_blocks = new Block[0, 0];
-			_blockAnimator.InterpolateProperty(_interactiveArea, "modulate", _interactiveArea.Modulate,
-				new Color(_interactiveArea.Modulate) {a = 0f}, .2f);
-			_blockAnimator.Start();
+			_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeOut{(reverseAnimation ? "" : "Reversed")}";
+			_animationPlayer.Play();
 			return;
 		}
 		
 		_blocks = new Block[height, width];
 		var plainArray = new int[_blocks.Length];
 		List<int> numbers = new();
-		
+
 		_cellSize = (GetViewport().Size.x - 48) / (width + (width < 5 && height > width ? 1 : 0));
 		_borderWidth = 3f;
 		var random = new Random();
@@ -141,9 +141,8 @@ public class MainScene : Node
 				_blocks[row, nextColumn].RectPosition, _blocks[row, column].RectPosition);
 		}
 
-		_blockAnimator.InterpolateProperty(_interactiveArea, "modulate", _interactiveArea.Modulate,
-			new Color(_interactiveArea.Modulate) { a = 1f }, .2f);
-		_blockAnimator.Start();
+		_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeIn{(reverseAnimation ? "" : "Reversed")}";
+		_animationPlayer.Play();
 	}
 	public bool IsOrderCorrect()
 	{
@@ -222,14 +221,14 @@ public class MainScene : Node
 
 			block.IsBeingAnimated = true;
 			var startVector = new Vector2(block.RectSize.x * x + _borderWidth / 2, block.RectSize.y * y + _borderWidth / 2);
-			_blockAnimator.InterpolateProperty(block, "rect_position", block.RectPosition,
+			_tween.InterpolateProperty(block, "rect_position", block.RectPosition,
 				startVector + movement * block.RectSize, .5f, Tween.TransitionType.Cubic);
-			_blockAnimator.Start();
+			_tween.Start();
 			
 			Task.Run(() =>
 			{
 				if (!IsOrderCorrect()) return;
-				_blockAnimator.Start();
+				_tween.Start();
 				_gameActive = false;
 				_controller.PauseTimer();
 			});
@@ -247,29 +246,23 @@ public class MainScene : Node
 			block.IsBeingAnimated = false;
 			_impactPlayer.Play();
 		}
-		else if (node is Node2D {Name: "InteractiveArea"} node2D)
-		{
-			if (node2D.Modulate.a == 0f)
-			{
-				GenerateField(_controller.GridWidth, _controller.GridHeight);
-			}
-			else
-			{
-				_gameActive = true;
-			}
-		}
 	}
 
-	public override void _Notification(int notification)
+	private void AnimationFinished(string name)
 	{
-		switch (notification)
+		switch (name)
 		{
-			case NotificationWmFocusOut:
-				if (_controller.TimerActive) _controller.PauseTimer();
+			case "InteractiveAreaFadeOutReversed":
+				GenerateField(_controller.GridWidth, _controller.GridHeight);
 				break;
-			case NotificationWmFocusIn:
-				if (_controller.Moves > 0) _controller.StartTimer();
+			case "InteractiveAreaFadeOut":
+				GenerateField(_controller.GridWidth, _controller.GridHeight, true);
+				break;
+			case "InteractiveAreaFadeInReversed":
+			case "InteractiveAreaFadeIn":
+				_gameActive = true;
 				break;
 		}
 	}
+	
 }

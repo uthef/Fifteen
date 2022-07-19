@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/Controller.cs" type="Script" id=2]
 [ext_resource path="res://scripts/MainScene.cs" type="Script" id=4]
@@ -10,6 +10,114 @@
 [ext_resource path="res://audio/impact.wav" type="AudioStream" id=10]
 [ext_resource path="res://audio/click.wav" type="AudioStream" id=11]
 
+[sub_resource type="Animation" id=2]
+resource_name = "InteractiveAreaFadeIn"
+tracks/0/type = "value"
+tracks/0/path = NodePath("InteractiveArea:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InteractiveArea:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -300, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "InteractiveAreaFadeInReversed"
+tracks/0/type = "value"
+tracks/0/path = NodePath("InteractiveArea:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 300, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InteractiveArea:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "InteractiveAreaFadeOut"
+tracks/0/type = "value"
+tracks/0/path = NodePath("InteractiveArea:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InteractiveArea:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 300, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "InteractiveAreaFadeOutReversed"
+tracks/0/type = "value"
+tracks/0/path = NodePath("InteractiveArea:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -300, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InteractiveArea:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [node name="Main Scene" type="Node"]
 script = ExtResource( 4 )
 
@@ -19,7 +127,7 @@ script = ExtResource( 4 )
 
 [node name="CellGroup" type="Node2D" parent="InteractiveArea"]
 
-[node name="BlockAnimator" type="Tween" parent="."]
+[node name="Tween" type="Tween" parent="."]
 playback_speed = 2.0
 playback/speed = 2.0
 
@@ -82,7 +190,6 @@ valign = 1
 margin_left = 568.0
 margin_right = 660.0
 margin_bottom = 92.0
-rect_pivot_offset = Vector2( -1723, -849 )
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 7 )
 texture_disabled = ExtResource( 8 )
@@ -96,6 +203,14 @@ bus = "MainBus"
 stream = ExtResource( 11 )
 bus = "MainBus"
 
-[connection signal="tween_completed" from="BlockAnimator" to="." method="BlockAnimatorCompleted"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_speed = 5.0
+anims/InteractiveAreaFadeIn = SubResource( 2 )
+anims/InteractiveAreaFadeInReversed = SubResource( 3 )
+anims/InteractiveAreaFadeOut = SubResource( 1 )
+anims/InteractiveAreaFadeOutReversed = SubResource( 4 )
+
+[connection signal="tween_completed" from="Tween" to="." method="BlockAnimatorCompleted"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveLeftButton" to="CanvasLayer" method="MoveLeftButtonPressed"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveRightButton" to="CanvasLayer" method="MoveRightButtonPressed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="AnimationFinished"]
