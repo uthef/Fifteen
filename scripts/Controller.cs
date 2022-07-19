@@ -8,9 +8,9 @@ public class Controller : CanvasLayer
     private DateTime _startTimestamp = new DateTime(0);
     private DateTime _pauseTimestamp = new DateTime(0);
     private long _moves = 0;
-    public const int MinGridWidth = 3;
-    public const int MaxGridWidth = 7;
-    public const int GridHeightMaxDiff = 2;
+    private const int MinGridWidth = 3;
+    private const int MaxGridWidth = 7;
+    private const int GridHeightMaxDiff = 2;
     
     private Label _timeLabel;
     private Label _dimensionLabel;

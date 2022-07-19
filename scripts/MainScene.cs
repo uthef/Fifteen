@@ -22,7 +22,7 @@ public class MainScene : Node
 	private float _borderWidth;
 	private float _cellSize;
 
-	private bool _gameActive = false;
+	private bool _gameActive;
 
 	public override void _Ready()
 	{
@@ -239,7 +239,7 @@ public class MainScene : Node
 		return false;
 	}
 
-	private void BlockAnimatorCompleted(object node, string path)
+	private void TweenCompleted(object node, string path)
 	{
 		if (node is Block block)
 		{

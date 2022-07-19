@@ -204,13 +204,13 @@ stream = ExtResource( 11 )
 bus = "MainBus"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 5.0
+playback_speed = 6.0
 anims/InteractiveAreaFadeIn = SubResource( 2 )
 anims/InteractiveAreaFadeInReversed = SubResource( 3 )
 anims/InteractiveAreaFadeOut = SubResource( 1 )
 anims/InteractiveAreaFadeOutReversed = SubResource( 4 )
 
-[connection signal="tween_completed" from="Tween" to="." method="BlockAnimatorCompleted"]
+[connection signal="tween_completed" from="Tween" to="." method="TweenCompleted"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveLeftButton" to="CanvasLayer" method="MoveLeftButtonPressed"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveRightButton" to="CanvasLayer" method="MoveRightButtonPressed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="AnimationFinished"]
