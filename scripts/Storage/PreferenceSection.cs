@@ -1,7 +1,7 @@
 ﻿using Godot;
 using Godot.Collections;
 
-namespace Fifteen.Storage;
+namespace Fifteen.Scripts.Storage;
 
 public class PreferenceSection
 {

@@ -148,7 +148,7 @@ text = "00:00:00.00"
 align = 1
 valign = 1
 
-[node name="Moves" type="Label" parent="CanvasLayer/VBox"]
+[node name="Counter" type="Label" parent="CanvasLayer/VBox"]
 margin_top = 50.0
 margin_right = 660.0
 margin_bottom = 111.0
@@ -175,7 +175,7 @@ texture_pressed = ExtResource( 7 )
 texture_disabled = ExtResource( 8 )
 flip_h = true
 
-[node name="DimensionLabel" type="Label" parent="CanvasLayer/HBox"]
+[node name="Label" type="Label" parent="CanvasLayer/HBox"]
 margin_left = 96.0
 margin_right = 564.0
 margin_bottom = 92.0

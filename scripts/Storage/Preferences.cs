@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using Godot.Collections;
+﻿using Godot.Collections;
 using Godot;
 
-namespace Fifteen.Storage;
+namespace Fifteen.Scripts.Storage;
 
 public static class Preferences
 {
@@ -16,11 +15,7 @@ public static class Preferences
         if (res == Error.Ok)
         {
             var parseResult = JSON.Parse(file.GetAsText()).Result;
-            
-            if (parseResult is Dictionary dict)
-            {
-                RootSection = new PreferenceSection(dict);
-            }
+            if (parseResult is Dictionary dict) RootSection = new PreferenceSection(dict);
         }
 
         file.Close();
@@ -31,8 +26,9 @@ public static class Preferences
     {
         File file = new File();
         var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId());
-        if (res == Error.Ok) 
-            file.StoreString(RootSection.ToJsonString());
+        
+        if (res == Error.Ok) file.StoreString(RootSection.ToJsonString());
+        
         file.Close();
         return res;
     }

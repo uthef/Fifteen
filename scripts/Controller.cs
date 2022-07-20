@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Net.Mime;
 using Godot;
-using Godot.Collections;
-using Fifteen.Storage;
+using Fifteen.Scripts.Storage;
 
 namespace Fifteen.Scripts;
 
@@ -12,37 +10,15 @@ public class Controller : CanvasLayer
     private DateTime _startTimestamp = new DateTime(0);
     private DateTime _pauseTimestamp = new DateTime(0);
     private long _moves = 0;
-    private const int MinGridWidth = 3;
-    private const int MaxGridWidth = 7;
-    private const int GridHeightMaxDiff = 2;
-    
+
     private Label _timeLabel;
-    private Label _dimensionLabel;
-    private Label _movesLabel;
+    private Label _label;
+    private Label _counterLabel;
     private TextureButton _moveRightButton, _moveLeftButton;
     private AudioStreamPlayer _clickPlayer;
 
-    private int _width, _height;
-
-    public int GridWidth
-    {
-        get => _width;
-        private set
-        {
-            _width = value;
-            _dimensionLabel.Text = $"{_width} x {_height}";
-        }
-    }
-
-    public int GridHeight
-    {
-        get => _height;
-        private set
-        {
-            _height = value;
-            _dimensionLabel.Text = $"{_width} x {_height}";
-        }
-    }
+    public delegate void MoveButtonPressedEventHandler(bool whatButton);
+    public event MoveButtonPressedEventHandler MoveButtonPressedEvent;
 
     public bool TimerActive { get; private set; }
 
@@ -55,20 +31,11 @@ public class Controller : CanvasLayer
     public override void _Ready()
     {
         _timeLabel = GetNode<Label>("VBox/Time");
-        _movesLabel =  GetNode<Label>("VBox/Moves");
-        _dimensionLabel = GetNode<Label>("HBox/DimensionLabel");
+        _counterLabel =  GetNode<Label>("VBox/Counter");
+        _label = GetNode<Label>("HBox/Label");
         _moveRightButton = GetNode<TextureButton>("HBox/MoveRightButton");
         _moveLeftButton = GetNode<TextureButton>("HBox/MoveLeftButton");
         _clickPlayer = GetNode<AudioStreamPlayer>("../ClickPlayer");
-
-        Preferences.LoadData();
-        GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
-        GridHeight = Preferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
-
-        if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) _moveLeftButton.Disabled = true;
-        else if (GridWidth == MaxGridWidth && GridHeight == MaxGridWidth + GridHeightMaxDiff)
-            _moveRightButton.Disabled = true;
-        
         
         SetProcess(false);
     }
@@ -78,20 +45,10 @@ public class Controller : CanvasLayer
         _timeLabel.Text = $"{DateTime.Now - _startTimestamp:hh':'mm':'ss'.'ff}";
     }
 
-    public void AddMove()
-    {
-        _movesLabel.Text = $"{++Moves}";
-    }
-
-    private void ResetMoves()
-    {
-        _movesLabel.Text = $"{Moves = 0}";
-    }
-
-    private void ResetTimerLabel()
-    {
-        _timeLabel.Text = "00:00:00.00";
-    }
+    public void AddMove() => _counterLabel.Text = $"{++Moves}";
+    private void ResetMoves() => _counterLabel.Text = $"{Moves = 0}";
+    private void ResetTimerLabel() => _timeLabel.Text = "00:00:00.00";
+    public void SetLabelText(string value) => _label.Text = value;
 
     public void StartTimer()
     {
@@ -115,43 +72,12 @@ public class Controller : CanvasLayer
         SetProcess(TimerActive = false);
     }
 
-    private void MoveLeftButtonPressed()
-    {
-        if (GridWidth > MinGridWidth || GridHeight > GridWidth)
-        {
-            if (GridHeight == GridWidth) GridHeight = --GridWidth + GridHeightMaxDiff;
-            else GridHeight--;
-            PauseTimer(true);
-            GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight, true);
-            _clickPlayer.Play();
-        }
-        
-        Preferences.RootSection.SetFloat("f_width", GridWidth);
-        Preferences.RootSection.SetFloat("f_height", GridHeight);
-        Preferences.SaveData();
-        
-        _moveRightButton.Disabled = false;
-        if (_width == MinGridWidth && GridHeight == _width) _moveLeftButton.Disabled = true;
-    }
+    public void PlayClickSound() => _clickPlayer.Play();
     
-    private void MoveRightButtonPressed()
-    {
-        if (GridWidth < MaxGridWidth || GridHeight < GridWidth + GridHeightMaxDiff)
-        {
-            if (GridHeight == GridWidth + GridHeightMaxDiff) GridHeight = ++GridWidth;
-            else GridHeight++;
-            PauseTimer(true);
-            GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight);
-            _clickPlayer.Play();
-        }
-        
-        Preferences.RootSection.SetFloat("f_width", GridWidth);
-        Preferences.RootSection.SetFloat("f_height", GridHeight);
-        Preferences.SaveData();
-        
-        _moveLeftButton.Disabled = false;
-        if (_height == MaxGridWidth + GridHeightMaxDiff) _moveRightButton.Disabled = true;
-    }
+    public void SetLeftButtonDisabled(bool value) => _moveLeftButton.Disabled = value;
+    public void SetRightButtonDisabled(bool value) => _moveRightButton.Disabled = value;
+    private void MoveLeftButtonPressed() => MoveButtonPressedEvent?.Invoke(false);
+    private void MoveRightButtonPressed() => MoveButtonPressedEvent?.Invoke(true);
     
     public override void _Notification(int notification)
     {
