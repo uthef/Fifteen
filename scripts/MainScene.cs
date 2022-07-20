@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fifteen.Scripts;
 using Fifteen.Scripts.Storage;
 using Godot;
 using Vector2 = Godot.Vector2;
+
 
 namespace Fifteen.Scripts;
 
@@ -18,6 +20,7 @@ public class MainScene : Node
 	private Controller _controller;
 	private AudioStreamPlayer _impactPlayer;
 	private AnimationPlayer _animationPlayer;
+	private Sprite _refImage;
 
 	private IBlock[,] _blocks = new IBlock[0, 0];
 	private float _borderWidth;
@@ -30,6 +33,7 @@ public class MainScene : Node
 	private bool _gameActive;
 	
 	private int _width, _height;
+	private int _imageCount = 5;
 
 	public int GridWidth
 	{
@@ -50,6 +54,8 @@ public class MainScene : Node
 		}
 	}
 
+	public bool ImageMode = true;
+
 	public override void _Ready()
 	{
 		_cellScene = GD.Load<PackedScene>("res://scenes/Cell.tscn");
@@ -63,12 +69,14 @@ public class MainScene : Node
 		_controller.MoveButtonPressedEvent += MoveButtonPressed;
 		_impactPlayer = GetNode<AudioStreamPlayer>("ImpactPlayer");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		_refImage = GetNode<Sprite>("InteractiveArea/ReferenceImage");
 		
 		Preferences.LoadData();
 		GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
 		GridHeight = Preferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
 
-		if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) _controller.SetLeftButtonDisabled(true);
+		if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) 
+			_controller.SetLeftButtonDisabled(true);
 		else if (GridWidth == MaxGridWidth && GridHeight == MaxGridWidth + GridHeightMaxDiff)
 			_controller.SetRightButtonDisabled(true);
 
@@ -86,20 +94,33 @@ public class MainScene : Node
 			_animationPlayer.Play();
 			return;
 		}
-		
+
+		var random = new Random();
+		PackedScene scene = ImageMode ? _spriteBlockScene : _blockScene;
+
 		_blocks = new IBlock[height, width];
 		var plainArray = new int[_blocks.Length];
 		List<int> numbers = new();
 
 		_cellSize = (GetViewport().Size.x - 48) / (width + (width < 5 && height > width ? 1 : 0));
 		_borderWidth = 3f;
-		var random = new Random();
 		float hue = (float)random.NextDouble(), saturationStep = 1f / _blocks.Length;
 		int emptyCellRow = 0;
 
 		foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
 		
 		_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
+		Texture texture = null;
+		Vector2 textureStartVector = new Vector2();
+			
+		if (ImageMode)
+		{
+			texture = GD.Load<Texture>($"res://sprites/images/{random.Next(_imageCount)}.jpg");
+			textureStartVector = new Vector2(texture.GetWidth() / 2f - _cellSize * width / 2, 0);
+			_refImage.Position = new Vector2(_borderWidth, _borderWidth ) + _cellGroup.Position;
+			_refImage.Texture = texture;
+			_refImage.RegionRect = new Rect2(textureStartVector, new Vector2(_cellSize * _blocks.GetLength(1), _cellSize * _blocks.GetLength(0)));
+		}
 
 		for (int i = 0; i < _blocks.Length; i++) numbers.Add(i);
 		
@@ -108,7 +129,7 @@ public class MainScene : Node
 			for (int j = 0; j < _blocks.GetLength(1); j++)
 			{
 				var cellInstance =_cellScene.Instance<ReferenceRect>();
-				IBlock blockInstance = _spriteBlockScene.Instance<IBlock>();
+				IBlock blockInstance = scene.Instance<IBlock>();
 				_blocks[i, j] = blockInstance;
 				
 				blockInstance.ArrayPositionX = j;
@@ -122,21 +143,26 @@ public class MainScene : Node
 				blockInstance.Pos = cellInstance.RectPosition;
 
 				_cellGroup.AddChild(cellInstance);
-				
-				var randIndex = random.Next(numbers.Count);
 
+				var randIndex = random.Next(numbers.Count);
+				
 				if (numbers[randIndex] != 0)
 				{
 					blockInstance.Size = cellInstance.RectSize;
 					_blockGroup.AddChild(blockInstance as Node);
 					plainArray[count++] = blockInstance.NumberValue = numbers[randIndex];
-
+					
 					if (blockInstance is SpriteBlock sprite)
 					{
-						int row = (sprite.NumberValue - 1) / _blocks.GetLength(0);
-						int col = sprite.NumberValue - 1 - _blocks.GetLength(0) * row;
-
-						sprite.RegionRect = new Rect2(new Vector2(col * _cellSize, row * _cellSize), new Vector2(_cellSize, _cellSize)); ;
+						sprite.Texture = texture;
+						int h = _blocks.GetLength(0), w = _blocks.GetLength(1), diff = h - (h - w);
+						int row = (sprite.NumberValue - 1) / diff;
+						int col = sprite.NumberValue - 1 - diff * row;
+						sprite.GetNode<Label>("Label").Text = sprite.NumberValue.ToString();
+						
+						sprite.RegionRect =
+							new Rect2(new Vector2( textureStartVector.x + col * _cellSize, row * _cellSize),
+								new Vector2(_cellSize, _cellSize));
 					}
 					else if (blockInstance is Block block)
                     {
@@ -144,7 +170,6 @@ public class MainScene : Node
 						block.Number.RectSize = blockInstance.Size;
 						block.Number.GetFont("custom_font").Set("size", _cellSize / 2f);
 					}
-
 				}
 				else
 				{
@@ -211,12 +236,7 @@ public class MainScene : Node
 
 		return true;
 	}
-<<<<<<< Updated upstream
-
 	public bool TryToMove(IBlock block)
-=======
-	public bool TryToMove(Block block)
->>>>>>> Stashed changes
 	{
 		if (!_gameActive) return false;
 		

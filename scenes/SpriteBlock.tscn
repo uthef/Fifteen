@@ -1,11 +1,17 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://sprites/images/2.jpg" type="Texture" id=1]
+[ext_resource path="res://themes/blockFont.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/SpriteBlock.cs" type="Script" id=2]
 
 [node name="SpriteBlock" type="Sprite"]
-texture = ExtResource( 1 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 128, 128 )
 script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.458824 )
+margin_right = 40.0
+margin_bottom = 14.0
+theme = ExtResource( 1 )

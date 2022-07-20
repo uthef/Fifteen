@@ -125,6 +125,10 @@ script = ExtResource( 4 )
 
 [node name="BlockGroup" type="Node2D" parent="InteractiveArea"]
 
+[node name="ReferenceImage" type="Sprite" parent="InteractiveArea"]
+centered = false
+region_enabled = true
+
 [node name="CellGroup" type="Node2D" parent="InteractiveArea"]
 
 [node name="Tween" type="Tween" parent="."]
