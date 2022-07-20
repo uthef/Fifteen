@@ -20,10 +20,8 @@ public class PreferenceSection
     {
         return !_prefs.Contains(key) ? defaultValue : _prefs[key].ToString();
     }
-    public float GetFloat(string key, float defaultValue, float max = float.MaxValue, float min = float.MinValue)
-    {
-        return _prefs.Contains(key) && _prefs[key] is float value ? value > max || value < min ? defaultValue : value : defaultValue;
-    }
+    public float GetFloat(string key, float defaultValue, float max = float.MaxValue, float min = float.MinValue) =>
+        _prefs.Contains(key) && _prefs[key] is float value && (value <= max || value >= min) ? value : defaultValue;
 
     public int GetInt32(string key, int defaultValue, int max = int.MaxValue, int min = int.MinValue)
     {
