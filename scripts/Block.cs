@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Fifteen.scripts;
+namespace Fifteen.Scripts;
 
 public class Block : ColorRect
 {

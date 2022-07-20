@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Godot;
 using Vector2 = Godot.Vector2;
 
-namespace Fifteen.scripts;
+namespace Fifteen.Scripts;
 
 public class MainScene : Node
 {

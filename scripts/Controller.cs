@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
+using Godot.Collections;
+using Fifteen.Storage;
 
-namespace Fifteen.scripts;
+namespace Fifteen.Scripts;
 
 public class Controller : CanvasLayer
 {
@@ -56,9 +60,16 @@ public class Controller : CanvasLayer
         _moveRightButton = GetNode<TextureButton>("HBox/MoveRightButton");
         _moveLeftButton = GetNode<TextureButton>("HBox/MoveLeftButton");
         _clickPlayer = GetNode<AudioStreamPlayer>("../ClickPlayer");
+
+        Preferences.LoadData();
+        GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
+        GridHeight = Preferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
+
+        if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) _moveLeftButton.Disabled = true;
+        else if (GridWidth == MaxGridWidth && GridHeight == MaxGridWidth + GridHeightMaxDiff)
+            _moveRightButton.Disabled = true;
         
-        GridWidth = 4;
-        GridHeight = 4;
+        
         SetProcess(false);
     }
 
@@ -114,7 +125,11 @@ public class Controller : CanvasLayer
             GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight, true);
             _clickPlayer.Play();
         }
-
+        
+        Preferences.RootSection.SetFloat("f_width", GridWidth);
+        Preferences.RootSection.SetFloat("f_height", GridHeight);
+        Preferences.SaveData();
+        
         _moveRightButton.Disabled = false;
         if (_width == MinGridWidth && GridHeight == _width) _moveLeftButton.Disabled = true;
     }
@@ -129,7 +144,11 @@ public class Controller : CanvasLayer
             GetTree().Root.GetNode<MainScene>("Main Scene").GenerateField(GridWidth, GridHeight);
             _clickPlayer.Play();
         }
-
+        
+        Preferences.RootSection.SetFloat("f_width", GridWidth);
+        Preferences.RootSection.SetFloat("f_height", GridHeight);
+        Preferences.SaveData();
+        
         _moveLeftButton.Disabled = false;
         if (_height == MaxGridWidth + GridHeightMaxDiff) _moveRightButton.Disabled = true;
     }
