@@ -2,13 +2,25 @@ using Godot;
 
 namespace Fifteen.Scripts;
 
-public class Block : ColorRect
+public class Block : ColorRect, IBlock
 {
     private MainScene _mainScene;
     public Label Number { get; private set; }
-    public int ArrayPositionX = 0, ArrayPositionY = 0;
-    public bool IsBeingAnimated = false;
-    
+    public int ArrayPositionX { get; set;  } = 0;
+    public int ArrayPositionY { get; set; } = 0;
+    public bool IsBeingAnimated { get; set; } = false;
+
+    public Vector2 Size
+    {
+        get => RectSize;
+        set => RectSize = value;
+    }
+    public Vector2 Pos
+    {
+        get => RectPosition;
+        set => RectPosition = value;
+    }
+
     private int _numberValue = 0;
 
     public int NumberValue
@@ -33,4 +45,5 @@ public class Block : ColorRect
         if (Input.IsMouseButtonPressed(1) && GetGlobalRect().HasPoint(GetGlobalMousePosition()) && !IsBeingAnimated) 
             _mainScene.TryToMove(this);
     }
+    
 }

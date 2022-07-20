@@ -10,6 +10,7 @@ public class MainScene : Node
 {
 	private PackedScene _cellScene;
 	private PackedScene _blockScene;
+	private PackedScene _spriteBlockScene;
 
 	private Node2D _cellGroup, _blockGroup;
 	private Tween _tween;
@@ -18,7 +19,7 @@ public class MainScene : Node
 	private AudioStreamPlayer _impactPlayer;
 	private AnimationPlayer _animationPlayer;
 
-	private Block[,] _blocks = new Block[0, 0];
+	private IBlock[,] _blocks = new IBlock[0, 0];
 	private float _borderWidth;
 	private float _cellSize;
 
@@ -28,6 +29,7 @@ public class MainScene : Node
 	{
 		_cellScene = GD.Load<PackedScene>("res://scenes/Cell.tscn");
 		_blockScene = GD.Load<PackedScene>("res://scenes/Block.tscn");
+		_spriteBlockScene = GD.Load<PackedScene>("res://scenes/SpriteBlock.tscn");
 		
 		_cellGroup = GetNode<Node2D>("InteractiveArea/CellGroup");
 		_blockGroup = GetNode<Node2D>("InteractiveArea/BlockGroup");
@@ -45,13 +47,13 @@ public class MainScene : Node
 		if (_blocks.Length != 0)
 		{
 			_gameActive = false;
-			_blocks = new Block[0, 0];
+			_blocks = new IBlock[0, 0];
 			_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeOut{(reverseAnimation ? "" : "Reversed")}";
 			_animationPlayer.Play();
 			return;
 		}
 		
-		_blocks = new Block[height, width];
+		_blocks = new IBlock[height, width];
 		var plainArray = new int[_blocks.Length];
 		List<int> numbers = new();
 
@@ -72,7 +74,7 @@ public class MainScene : Node
 			for (int j = 0; j < _blocks.GetLength(1); j++)
 			{
 				var cellInstance =_cellScene.Instance<ReferenceRect>();
-				var blockInstance =  _blockScene.Instance<Block>();
+				IBlock blockInstance = _spriteBlockScene.Instance<IBlock>();
 				_blocks[i, j] = blockInstance;
 				
 				blockInstance.ArrayPositionX = j;
@@ -83,7 +85,7 @@ public class MainScene : Node
 				
 				var margin = new Vector2(cellInstance.BorderWidth / 2, cellInstance.BorderWidth / 2);
 				cellInstance.RectPosition = margin + new Vector2(_cellSize * j, _cellSize * i);
-				blockInstance.RectPosition = cellInstance.RectPosition;
+				blockInstance.Pos = cellInstance.RectPosition;
 
 				_cellGroup.AddChild(cellInstance);
 				
@@ -91,12 +93,24 @@ public class MainScene : Node
 
 				if (numbers[randIndex] != 0)
 				{
-					blockInstance.RectSize = cellInstance.RectSize;
-					_blockGroup.AddChild(blockInstance);
+					blockInstance.Size = cellInstance.RectSize;
+					_blockGroup.AddChild(blockInstance as Node);
 					plainArray[count++] = blockInstance.NumberValue = numbers[randIndex];
-					blockInstance.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, .4f);
-					blockInstance.Number.RectSize = blockInstance.RectSize;
-					blockInstance.Number.GetFont("custom_font").Set("size", _cellSize / 2f);
+
+					if (blockInstance is SpriteBlock sprite)
+					{
+						int row = (sprite.NumberValue - 1) / _blocks.GetLength(0);
+						int col = sprite.NumberValue - 1 - _blocks.GetLength(0) * row;
+
+						sprite.RegionRect = new Rect2(new Vector2(col * _cellSize, row * _cellSize), new Vector2(_cellSize, _cellSize)); ;
+					}
+					else if (blockInstance is Block block)
+                    {
+						block.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, .4f);
+						block.Number.RectSize = blockInstance.Size;
+						block.Number.GetFont("custom_font").Set("size", _cellSize / 2f);
+					}
+
 				}
 				else
 				{
@@ -137,8 +151,8 @@ public class MainScene : Node
 			(_blocks[row, column], _blocks[row, nextColumn]) = (_blocks[row, nextColumn], _blocks[row, column]);
 			(_blocks[row, column].ArrayPositionX, _blocks[row, nextColumn].ArrayPositionX) = (
 				_blocks[row, nextColumn].ArrayPositionX, _blocks[row, column].ArrayPositionX);
-			(_blocks[row, column].RectPosition, _blocks[row, nextColumn].RectPosition) = (
-				_blocks[row, nextColumn].RectPosition, _blocks[row, column].RectPosition);
+			(_blocks[row, column].Pos, _blocks[row, nextColumn].Pos) = (
+				_blocks[row, nextColumn].Pos, _blocks[row, column].Pos);
 		}
 
 		_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeIn{(reverseAnimation ? "" : "Reversed")}";
@@ -164,7 +178,7 @@ public class MainScene : Node
 		return true;
 	}
 
-	public bool TryToMove(Block block)
+	public bool TryToMove(IBlock block)
 	{
 		if (!_gameActive) return false;
 		
@@ -218,11 +232,11 @@ public class MainScene : Node
 			{
 				Task.Run(() => { _controller.StartTimer(); });
 			}
-
 			block.IsBeingAnimated = true;
-			var startVector = new Vector2(block.RectSize.x * x + _borderWidth / 2, block.RectSize.y * y + _borderWidth / 2);
-			_tween.InterpolateProperty(block, "rect_position", block.RectPosition,
-				startVector + movement * block.RectSize, .5f, Tween.TransitionType.Cubic);
+
+			var startVector = new Vector2(block.Size.x * x + _borderWidth / 2, block.Size.y * y + _borderWidth / 2);
+			_tween.InterpolateProperty(block as Node, block is Block ? "rect_position" : "position", block.Pos,
+				startVector + movement * block.Size, .5f, Tween.TransitionType.Cubic);
 			_tween.Start();
 			
 			Task.Run(() =>
@@ -241,7 +255,7 @@ public class MainScene : Node
 
 	private void TweenCompleted(object node, string path)
 	{
-		if (node is Block block)
+		if (node is IBlock block)
 		{
 			block.IsBeingAnimated = false;
 			_impactPlayer.Play();
