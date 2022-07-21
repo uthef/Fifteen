@@ -30,8 +30,8 @@ public class Controller : CanvasLayer
     
     public override void _Ready()
     {
-        _timeLabel = GetNode<Label>("VBox/Time");
-        _counterLabel =  GetNode<Label>("VBox/Counter");
+        _timeLabel = GetNode<Label>("TopBox/VBox/Time");
+        _counterLabel =  GetNode<Label>("TopBox/VBox/Counter");
         _label = GetNode<Label>("HBox/Label");
         _moveRightButton = GetNode<TextureButton>("HBox/MoveRightButton");
         _moveLeftButton = GetNode<TextureButton>("HBox/MoveLeftButton");

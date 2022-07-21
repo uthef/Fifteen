@@ -6,7 +6,6 @@ using Fifteen.Scripts.Storage;
 using Godot;
 using Vector2 = Godot.Vector2;
 
-
 namespace Fifteen.Scripts;
 
 public class MainScene : Node
