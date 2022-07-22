@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://themes/blockFont.tres" type="Theme" id=1]
-[ext_resource path="res://scripts/SpriteBlock.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/SpriteBlock.cs" type="Script" id=2]
 
 [node name="SpriteBlock" type="Sprite"]
 centered = false

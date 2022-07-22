@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icons8-play-92.png-de71648ce93ed35f90b99b5101efd920.stex"
+path="res://.import/6.jpg-70bbf20e0c579393778dcbb873e7af47.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/icons8-play-92.png"
-dest_files=[ "res://.import/icons8-play-92.png-de71648ce93ed35f90b99b5101efd920.stex" ]
+source_file="res://sprites/images/6.jpg"
+dest_files=[ "res://.import/6.jpg-70bbf20e0c579393778dcbb873e7af47.stex" ]
 
 [params]
 

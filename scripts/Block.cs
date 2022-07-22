@@ -1,3 +1,4 @@
+using Fifteen.Scripts.Special;
 using Godot;
 
 namespace Fifteen.Scripts;
@@ -6,8 +7,8 @@ public class Block : ColorRect, IBlock
 {
     private MainScene _mainScene;
     public Label Number { get; private set; }
-    public int ArrayPositionX { get; set;  } = 0;
-    public int ArrayPositionY { get; set; } = 0;
+    public int Column { get; set; } = 0;
+    public int Row { get; set; } = 0;
     public bool IsBeingAnimated { get; set; } = false;
 
     public Vector2 Size
@@ -45,5 +46,4 @@ public class Block : ColorRect, IBlock
         if (Input.IsMouseButtonPressed(1) && GetGlobalRect().HasPoint(GetGlobalMousePosition()) && !IsBeingAnimated) 
             _mainScene.TryToMove(this);
     }
-    
 }

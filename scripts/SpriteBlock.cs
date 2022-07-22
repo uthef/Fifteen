@@ -1,12 +1,13 @@
 using Godot;
 using System;
+using Fifteen.Scripts.Special;
 
 namespace Fifteen.Scripts;
 
 public class SpriteBlock : Sprite, IBlock
 {
-    public int ArrayPositionX { get; set; } = 0;
-    public int ArrayPositionY { get; set; } = 0;
+    public int Column { get; set; } = 0;
+    public int Row { get; set; } = 0;
     public bool IsBeingAnimated { get; set; } = false;
     private MainScene _mainScene;
 
