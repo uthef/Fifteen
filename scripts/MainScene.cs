@@ -72,14 +72,15 @@ public class MainScene : Node
 		_controller.MoveButtonPressedEvent += MoveButtonPressed;
 		_controller.OptionsPanelStateChanged += opened =>
 		{
-			_gridActive = !opened;
 			refButton.Enabled = ImageMode;
 
 			if (opened)
 			{
+				_gridActive = false;
 				_switchImageButton.Text = ImageMode ? _switchImageButton.ToggleText : _switchImageButton.DefaultText;
 				refButton.Text = _refImage.Modulate.a is 1f ? refButton.ToggleText : refButton.DefaultText;
 			}
+			else _gridActive = !(_refImage.Modulate.a > 0); 
 		};
 		_controller.OptionsItemSelectedEvent += OptionsItemSelected;
 		

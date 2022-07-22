@@ -96,7 +96,6 @@ public class Controller : CanvasLayer
         if (_options.Modulate.a > 0)
         {
             _uiAnimator.CurrentAnimation = "MenuFadeOut";
-            OptionsPanelStateChanged?.Invoke(false);
             _uiAnimator.Play();
         }
         else if (_options.Modulate.a <= 1)
@@ -124,6 +123,7 @@ public class Controller : CanvasLayer
                 MenuVisible = true;
                 break;
             case "MenuFadeOut":
+                OptionsPanelStateChanged?.Invoke(false);
                 _options.Visible = false;
                 MenuVisible = _menuBlocked = false;
                 break;
