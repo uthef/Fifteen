@@ -135,13 +135,9 @@ public class MainScene : Node
 		_borderWidth = 3f;
 		float hue = (float)random.NextDouble(), saturationStep = 1f / _blocks.Length;
 		int emptyCellRow = 0;
-
-		foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
 		
-		_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
-		Texture texture = null;
 		Vector2 textureStartVector = new Vector2();
-			
+		Texture texture = null;
 		if (ImageMode)
 		{
 			texture = GD.Load<Texture>($"res://sprites/images/{random.Next(_imageCount)}.jpg");
@@ -150,6 +146,10 @@ public class MainScene : Node
 			_refImage.Texture = texture;
 			_refImage.RegionRect = new Rect2(textureStartVector, new Vector2(_cellSize * width, _cellSize * height));
 		}
+
+		foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
+		
+		_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
 
 		for (int i = 0; i < _blocks.Length; i++) numbers.Add(i);
 		

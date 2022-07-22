@@ -194,13 +194,13 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 445, 120 ), Vector2( 445, 158 ) ]
+"values": [ Vector2( 396, 140 ), Vector2( 396, 170 ) ]
 }
 
 [sub_resource type="Animation" id=7]
 resource_name = "MenuFadeOut"
 tracks/0/type = "value"
-tracks/0/path = NodePath("CanvasLayer/OptionsMenu:rect_position")
+tracks/0/path = NodePath("CanvasLayer/OptionsMenu:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -209,19 +209,19 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 445, 158 ), Vector2( 445, 120 ) ]
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("CanvasLayer/OptionsMenu:modulate")
+tracks/1/path = NodePath("CanvasLayer/OptionsMenu:rect_position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.9 ),
+"times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [ Vector2( 396, 170 ), Vector2( 396, 140 ) ]
 }
 
 [sub_resource type="Animation" id=10]
@@ -382,12 +382,13 @@ texture_disabled = ExtResource( 8 )
 stretch_mode = 3
 
 [node name="OptionsMenu" type="PanelContainer" parent="CanvasLayer"]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
-anchor_left = 0.6
-anchor_top = 0.126
-anchor_right = 0.9
-anchor_bottom = 0.323
+anchor_left = 0.55
+anchor_right = 1.0
+margin_top = 140.0
+margin_right = -60.0
+margin_bottom = 450.0
+rect_pivot_offset = Vector2( 360, 1 )
 custom_styles/panel = SubResource( 5 )
 __meta__ = {
 "_edit_group_": true
@@ -395,26 +396,26 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/OptionsMenu"]
 margin_top = 30.0
-margin_right = 216.0
-margin_bottom = 222.16
+margin_right = 264.0
+margin_bottom = 280.0
 custom_constants/separation = 0
 
 [node name="Reset" parent="CanvasLayer/OptionsMenu/VBoxContainer" instance=ExtResource( 14 )]
-margin_right = 215.0
-margin_bottom = 64.0
+margin_right = 264.0
+margin_bottom = 83.0
 DefaultText = "Reset"
 
 [node name="SwitchImageMode" parent="CanvasLayer/OptionsMenu/VBoxContainer" instance=ExtResource( 14 )]
-margin_top = 64.0
-margin_right = 215.0
-margin_bottom = 128.0
+margin_top = 83.0
+margin_right = 264.0
+margin_bottom = 166.0
 DefaultText = "Switch to pictures"
 ToggleText = "Switch to numbers"
 
 [node name="Reference" parent="CanvasLayer/OptionsMenu/VBoxContainer" instance=ExtResource( 14 )]
-margin_top = 128.0
-margin_right = 215.0
-margin_bottom = 192.0
+margin_top = 166.0
+margin_right = 264.0
+margin_bottom = 250.0
 _enabled = false
 DefaultText = "Show reference"
 ToggleText = "Hide reference"
