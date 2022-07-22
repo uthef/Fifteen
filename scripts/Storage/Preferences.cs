@@ -1,36 +1,37 @@
 ﻿using Godot.Collections;
 using Godot;
 
-namespace Fifteen.Scripts.Storage;
-
-public static class Preferences
+namespace Fifteen.Scripts.Storage
 {
-    public static PreferenceSection RootSection { get; private set; } = new PreferenceSection();
-    public const string FilePath = "user://userdata.bin";
-
-    public static Error LoadData()
+    public static class Preferences
     {
-        File file = new File();
-        var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Read, OS.GetUniqueId());
-        if (res == Error.Ok)
+        public static PreferenceSection RootSection { get; private set; } = new PreferenceSection();
+        public const string FilePath = "user://userdata.bin";
+
+        public static Error LoadData()
         {
-            var parseResult = JSON.Parse(file.GetAsText()).Result;
-            if (parseResult is Dictionary dict) RootSection = new PreferenceSection(dict);
+            File file = new File();
+            var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Read, OS.GetUniqueId());
+            if (res == Error.Ok)
+            {
+                var parseResult = JSON.Parse(file.GetAsText()).Result;
+                if (parseResult is Dictionary dict) RootSection = new PreferenceSection(dict);
+            }
+
+            file.Close();
+            return res;
         }
 
-        file.Close();
-        return res;
-    }
-
-    public static Error SaveData()
-    {
-        File file = new File();
-        var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId());
+        public static Error SaveData()
+        {
+            File file = new File();
+            var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId());
+            
+            if (res == Error.Ok) file.StoreString(RootSection.ToJsonString());
+            
+            file.Close();
+            return res;
+        }
         
-        if (res == Error.Ok) file.StoreString(RootSection.ToJsonString());
-        
-        file.Close();
-        return res;
     }
-    
 }

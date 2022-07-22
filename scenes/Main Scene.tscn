@@ -15,7 +15,7 @@
 [ext_resource path="res://sprites/ui/back_icon/back_icon.png" type="Texture" id=13]
 [ext_resource path="res://scenes/RectButton.tscn" type="PackedScene" id=14]
 [ext_resource path="res://sprites/ui/options_icon/options_icon_disabled.png" type="Texture" id=15]
-[ext_resource path="res://Scripts/Reference.cs" type="Script" id=16]
+[ext_resource path="res://Scripts/PictureReference.cs" type="Script" id=16]
 [ext_resource path="res://sprites/pictures/dragon.jpg" type="Texture" id=17]
 [ext_resource path="res://sprites/pictures/red_panda.jpg" type="Texture" id=18]
 [ext_resource path="res://sprites/pictures/people.jpg" type="Texture" id=19]
@@ -347,6 +347,7 @@ margin_top = 9.0
 margin_right = 660.0
 margin_bottom = 101.0
 size_flags_vertical = 4
+toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 1 )

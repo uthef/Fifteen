@@ -1,8 +1,7 @@
 using Godot;
-using System;
 using Fifteen.Scripts;
 
-public class Reference : Sprite
+public class PictureReference : Sprite
 {
     public delegate void ClickEventHandler();
     public event ClickEventHandler ClickEvent;

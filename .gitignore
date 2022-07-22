@@ -12,3 +12,6 @@ data_*/
 
 # Android-specific ignores
 android/
+
+# Visual Studio Code
+.vscode/

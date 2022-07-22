@@ -1,36 +1,37 @@
 using Godot;
 
-namespace Fifteen.Scripts;
-
-public class RectButton : ColorRect
+namespace Fifteen.Scripts
 {
-    [Export] private bool _enabled = true;
-    private string _text;
-    [Export] public string DefaultText = "Item";
-    [Export] public string ToggleText = "Item";
-    
-    public string Text
+    public class RectButton : ColorRect
     {
-        get => _text;
-        set
+        [Export] private bool _enabled = true;
+        private string _text;
+        [Export] public string DefaultText = "Item";
+        [Export] public string ToggleText = "Item";
+        
+        public string Text
         {
-            _text = value;
-            GetNode<Label>("Label").Text = _text;
+            get => _text;
+            set
+            {
+                _text = value;
+                GetNode<Label>("Label").Text = _text;
+            }
         }
-    }
-    public bool Enabled
-    {
-        get => _enabled;
-        set
+        public bool Enabled
         {
-            _enabled = value;
-            GetNode<Label>("Label").Modulate = _enabled ? new Color(1f, 1f, 1f)  : new Color(.3f, .3f, .3f);
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                GetNode<Label>("Label").Modulate = _enabled ? new Color(1f, 1f, 1f)  : new Color(.3f, .3f, .3f);
+            }
         }
-    }
 
-    public override void _Ready()
-    {
-        Enabled = Enabled;
-        Text = DefaultText;
+        public override void _Ready()
+        {
+            Enabled = Enabled;
+            Text = DefaultText;
+        }
     }
 }
