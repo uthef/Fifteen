@@ -180,8 +180,7 @@ public class Controller : CanvasLayer
             case NotificationWmFocusOut:
                 if (TimerActive) PauseTimer();
                 break;
-            case NotificationWmFocusIn:
-                if (Moves > 0 && _options.Modulate.a == 0) StartTimer();
+            case NotificationWmGoBackRequest:
                 break;
         }
     }

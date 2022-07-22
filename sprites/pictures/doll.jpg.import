@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/3.jpg-b4668075c90721b0aa92031fc261bb82.stex"
+path="res://.import/doll.jpg-b6808edf948195b2dbdb15a1d447a60e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/images/3.jpg"
-dest_files=[ "res://.import/3.jpg-b4668075c90721b0aa92031fc261bb82.stex" ]
+source_file="res://sprites/pictures/doll.jpg"
+dest_files=[ "res://.import/doll.jpg-b6808edf948195b2dbdb15a1d447a60e.stex" ]
 
 [params]
 

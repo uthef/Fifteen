@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/0.jpg-046c92d4a7932bc1367b8434f87e100e.stex"
+path="res://.import/dragon.jpg-4ee1b4bc9223b484e1a5fd7e8dd5d4ef.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/images/0.jpg"
-dest_files=[ "res://.import/0.jpg-046c92d4a7932bc1367b8434f87e100e.stex" ]
+source_file="res://sprites/pictures/dragon.jpg"
+dest_files=[ "res://.import/dragon.jpg-4ee1b4bc9223b484e1a5fd7e8dd5d4ef.stex" ]
 
 [params]
 

@@ -16,6 +16,7 @@ boot_splash/image="res://Logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0980392, 0.0980392, 0.0980392, 1 )
 config/icon="res://Fifteen.png"
+config/quit_on_go_back=false
 
 [display]
 

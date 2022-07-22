@@ -20,6 +20,7 @@ public class MainScene : Node
 	private AudioStreamPlayer _impactPlayer;
 	private AnimationPlayer _animationPlayer;
 	private Reference _refImage;
+	[Export] private Texture[] _pictures;
 
 	private IBlock[,] _blocks = new IBlock[0, 0];
 	private float _borderWidth;
@@ -32,7 +33,6 @@ public class MainScene : Node
 	private bool _gridActive;
 	
 	private int _width, _height;
-	private int _imageCount = 9;
 
 	public int GridWidth
 	{
@@ -135,21 +135,21 @@ public class MainScene : Node
 		_borderWidth = 3f;
 		float hue = (float)random.NextDouble(), saturationStep = 1f / _blocks.Length;
 		int emptyCellRow = 0;
+
+		foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
+		
+		_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
 		
 		Vector2 textureStartVector = new Vector2();
 		Texture texture = null;
 		if (ImageMode)
 		{
-			texture = GD.Load<Texture>($"res://sprites/images/{random.Next(_imageCount)}.jpg");
+			texture = _pictures[random.Next(_pictures.Length)];
 			textureStartVector = new Vector2(texture.GetWidth() / 2f - _cellSize * width / 2, texture.GetHeight() / 2f - _cellSize * height / 2);
-			_refImage.Position = new Vector2(_borderWidth / 2, _borderWidth / 2) + new Vector2(_cellGroup.Position);
+			_refImage.Position = new Vector2(_borderWidth / 2, _borderWidth / 2) + _cellGroup.Position;
 			_refImage.Texture = texture;
 			_refImage.RegionRect = new Rect2(textureStartVector, new Vector2(_cellSize * width, _cellSize * height));
 		}
-
-		foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
-		
-		_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
 
 		for (int i = 0; i < _blocks.Length; i++) numbers.Add(i);
 		
