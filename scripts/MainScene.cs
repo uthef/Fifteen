@@ -81,6 +81,7 @@ namespace Fifteen.Scripts {
 			Preferences.LoadData();
 			GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
 			GridHeight = Preferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
+			ImageMode = Preferences.RootSection.GetBool("picture_mode", false);
 
 			if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) 
 				_controller.SetLeftButtonDisabled(true);
@@ -331,7 +332,8 @@ namespace Fifteen.Scripts {
 					break;
 				case OptionItems.SwitchImageMode:
 					_controller.PauseTimer(true);
-					ImageMode = !ImageMode;
+					Preferences.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
+					Preferences.SaveData();
 					_refImage.Modulate = new Color(_refImage.Modulate) { a = 0f };
 					GenerateField(GridWidth, GridHeight);
 					break;
@@ -377,11 +379,10 @@ namespace Fifteen.Scripts {
 			}
 			
 			_controller.PauseTimer(true);
+			
 			Preferences.RootSection.SetFloat("f_width", GridWidth);
 			Preferences.RootSection.SetFloat("f_height", GridHeight);
 			Preferences.SaveData();
-			
-			_controller.PlayClickSound();
 		}
 		private void AnimationFinished(string name)
 		{

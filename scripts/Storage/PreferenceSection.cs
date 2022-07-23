@@ -33,6 +33,17 @@ namespace Fifteen.Scripts.Storage
             if (!_prefs.Contains(key)) _prefs.Add(key, value);
             else _prefs[key] = value;
         }
+
+        public bool GetBool(string key, bool defaultValue) 
+        {
+            return _prefs.Contains(key) && bool.TryParse(_prefs[key].ToString(), out bool value) ? value : defaultValue;
+        }
+
+        public void SetBool(string key, bool value) 
+        {
+            if (!_prefs.Contains(key)) _prefs.Add(key, value);
+            else _prefs[key] = value;
+        }
         
         public void SetFloat(string key, float value)
         {

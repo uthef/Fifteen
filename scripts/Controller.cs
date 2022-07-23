@@ -1,5 +1,6 @@
 using System;
 using Fifteen.Scripts.Special;
+using Fifteen.Scripts.Storage;
 using Godot;
 
 namespace Fifteen.Scripts {
@@ -19,7 +20,6 @@ namespace Fifteen.Scripts {
         private PanelContainer _options;
         private TextureButton _optionsButton;
         private AnimationPlayer _uiAnimator;
-        private Node2D _interactiveArea;
 
         public delegate void MoveButtonPressedEventHandler(bool whatButton);
         public delegate void OptionsItemSelectedEventHandler(OptionItems item);
@@ -48,7 +48,6 @@ namespace Fifteen.Scripts {
             _options = GetNode<PanelContainer>("OptionsMenu");
             _optionsButton = GetNode<TextureButton>("TopBox/OptionsButton");
             _uiAnimator = GetNode<AnimationPlayer>("../UIAnimationPlayer");
-            _interactiveArea = GetNode<Node2D>("../InteractiveArea");
 
             SetProcess(false);
         }
@@ -89,19 +88,29 @@ namespace Fifteen.Scripts {
         
         public void SetLeftButtonDisabled(bool value) => _moveLeftButton.Disabled = value;
         public void SetRightButtonDisabled(bool value) => _moveRightButton.Disabled = value;
-        private void MoveLeftButtonPressed() => MoveButtonPressedEvent?.Invoke(false);
-        private void MoveRightButtonPressed() => MoveButtonPressedEvent?.Invoke(true);
+        private void MoveLeftButtonPressed() 
+        { 
+            MoveButtonPressedEvent?.Invoke(false);
+            PlayClickSound();
+        }
+        private void MoveRightButtonPressed()
+        { 
+            MoveButtonPressedEvent?.Invoke(true);
+            PlayClickSound();
+        }
 
         private void OptionsButtonPressed()
         {
             if (_options.Modulate.a > 0)
             {
+                PlayClickSound();
                 _optionsButton.Pressed = false;
                 _uiAnimator.CurrentAnimation = "MenuFadeOut";
                 _uiAnimator.Play();
             }
             else if (_options.Modulate.a <= 1)
             {
+                PlayClickSound();
                 OptionsPanelStateChanged?.Invoke(true);
                 _options.Visible = true;
                 _uiAnimator.CurrentAnimation = "MenuFadeIn";
@@ -168,6 +177,7 @@ namespace Fifteen.Scripts {
                     break;
                 case NotificationWmGoBackRequest:
                     break;
+                break;
             }
         }
     }

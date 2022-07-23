@@ -11,7 +11,7 @@ namespace Fifteen.Scripts.Storage
         public static Error LoadData()
         {
             File file = new File();
-            var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Read, OS.GetUniqueId());
+            var res = file.Open(FilePath, File.ModeFlags.Read);
             if (res == Error.Ok)
             {
                 var parseResult = JSON.Parse(file.GetAsText()).Result;
@@ -25,7 +25,7 @@ namespace Fifteen.Scripts.Storage
         public static Error SaveData()
         {
             File file = new File();
-            var res = file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId());
+            var res = file.Open(FilePath, File.ModeFlags.Write);
             
             if (res == Error.Ok) file.StoreString(RootSection.ToJsonString());
             
