@@ -9,7 +9,6 @@ using Vector2 = Godot.Vector2;
 namespace Fifteen.Scripts {
 	public class MainScene : Node
 	{
-		private PackedScene _cellScene;
 		private PackedScene _blockScene;
 		private PackedScene _spriteBlockScene;
 
@@ -19,11 +18,13 @@ namespace Fifteen.Scripts {
 		private AudioStreamPlayer _impactPlayer;
 		private AnimationPlayer _animationPlayer;
 		private PictureReference _refImage;
+		private RectButton  _switchImageButton, _refButton;
 		[Export] private Texture[] _pictures;
 
 		private IBlock[,] _blocks = new IBlock[0, 0];
-		private float _borderWidth;
-		private float _cellSize;
+		public float BorderWidth {get; private set;}
+		public Vector2 BorderMargin {get; private set;}
+		public float CellSize {get; private set;}
 		
 		private const int MinGridWidth = 3;
 		private const int MaxGridWidth = 7;
@@ -56,42 +57,26 @@ namespace Fifteen.Scripts {
 
 		public override void _Ready()
 		{
-			_cellScene = GD.Load<PackedScene>("res://scenes/Cell.tscn");
+			// Loading scenes
 			_blockScene = GD.Load<PackedScene>("res://scenes/Block.tscn");
 			_spriteBlockScene = GD.Load<PackedScene>("res://scenes/SpriteBlock.tscn");
-			
+
+			// Getting nodes
 			_cellGroup = GetNode<Node2D>("InteractiveArea/CellGroup");
 			_blockGroup = GetNode<Node2D>("InteractiveArea/BlockGroup");
 			_tween = GetNode<Tween>("Tween");
-
 			_controller = GetNode<Controller>("CanvasLayer");
-			RectButton _switchImageButton = _controller.GetNode<RectButton>("OptionsMenu/VBoxContainer/SwitchImageMode");
-			RectButton refButton = _controller.GetNode<RectButton>("OptionsMenu/VBoxContainer/Reference");
-			
-			_controller.MoveButtonPressedEvent += MoveButtonPressed;
-			_controller.OptionsPanelStateChanged += opened =>
-			{
-				refButton.Enabled = ImageMode;
-
-				if (opened)
-				{
-					_gridActive = false;
-					_switchImageButton.Text = ImageMode ? _switchImageButton.ToggleText : _switchImageButton.DefaultText;
-					refButton.Text = _refImage.Modulate.a is 1f ? refButton.ToggleText : refButton.DefaultText;
-				}
-				else _gridActive = !(_refImage.Modulate.a > 0); 
-			};
-			_controller.OptionsItemSelectedEvent += OptionsItemSelected;
-			
+			_switchImageButton = _controller.GetNode<RectButton>("OptionsMenu/VBoxContainer/SwitchImageMode");
+			_refButton = _controller.GetNode<RectButton>("OptionsMenu/VBoxContainer/Reference");
 			_impactPlayer = GetNode<AudioStreamPlayer>("ImpactPlayer");
 			_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 			_refImage = GetNode<PictureReference>("InteractiveArea/Reference");
 
-			_refImage.ClickEvent += () =>
-			{
-				_animationPlayer.CurrentAnimation = "ReferenceFadeOut";
-				_animationPlayer.Play();
-			};
+			// Adding events
+			_controller.MoveButtonPressedEvent += MoveButtonPressed;
+			_controller.OptionsPanelStateChanged += OptionsPanelStateChanged;
+			_controller.OptionsItemSelectedEvent += OptionsItemSelected;
+			_refImage.ClickEvent += ReferenceImageClick;
 
 			Preferences.LoadData();
 			GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
@@ -130,24 +115,28 @@ namespace Fifteen.Scripts {
 			var plainArray = new int[_blocks.Length];
 			List<int> numbers = new();
 
-			_cellSize = (GetViewport().Size.x - 48) / (width + (width < 5 && height > width ? 1 : 0));
-			_borderWidth = 3f;
+			CellSize = (GetViewport().Size.x - 48) / (width + (width < 5 && height > width ? 1 : 0));
+			BorderWidth = 3f;
+			BorderMargin = new Vector2(BorderWidth / 2, BorderWidth / 2);
+
 			float hue = (float)random.NextDouble(), saturationStep = 1f / _blocks.Length;
 			int emptyCellRow = 0;
 
-			foreach (Node child in _cellGroup.GetChildren() + _blockGroup.GetChildren()) child.QueueFree(); 
+			foreach (Node child in _blockGroup.GetChildren()) child.QueueFree(); 
 			
-			_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - _cellSize * width / 2f - _borderWidth / 2, GetViewport().Size.y  / 2 - _cellSize * height / 2f - _borderWidth / 2);
+			_blockGroup.Position = _cellGroup.Position = new Vector2(GetViewport().Size.x  / 2 - CellSize * width / 2f - BorderWidth / 2, GetViewport().Size.y / 2 - CellSize * height / 2f - BorderWidth / 2);
+			_cellGroup.Update();
 			
 			Vector2 textureStartVector = new Vector2();
 			Texture texture = null;
+			
 			if (ImageMode)
 			{
 				texture = _pictures[random.Next(_pictures.Length)];
-				textureStartVector = new Vector2(texture.GetWidth() / 2f - _cellSize * width / 2, texture.GetHeight() / 2f - _cellSize * height / 2);
-				_refImage.Position = new Vector2(_borderWidth / 2, _borderWidth / 2) + _cellGroup.Position;
+				textureStartVector = new Vector2(texture.GetWidth() / 2f - CellSize * width / 2, texture.GetHeight() / 2f - CellSize * height / 2);
+				_refImage.Position = new Vector2(BorderWidth / 2, BorderWidth / 2) + _cellGroup.Position;
 				_refImage.Texture = texture;
-				_refImage.RegionRect = new Rect2(textureStartVector, new Vector2(_cellSize * width, _cellSize * height));
+				_refImage.RegionRect = new Rect2(textureStartVector, new Vector2(CellSize * width, CellSize * height));
 			}
 
 			for (int i = 0; i < _blocks.Length; i++) numbers.Add(i);
@@ -156,27 +145,19 @@ namespace Fifteen.Scripts {
 			{
 				for (int j = 0; j < width; j++)
 				{
-					var cellInstance =_cellScene.Instance<ReferenceRect>();
 					IBlock blockInstance = scene.Instance<IBlock>();
 					_blocks[i, j] = blockInstance;
 
 					blockInstance.Column = j;
 					blockInstance.Row = i;
-
-					cellInstance.RectSize = new Vector2(_cellSize, _cellSize);
-					cellInstance.BorderWidth = _borderWidth;
 					
-					var margin = new Vector2(cellInstance.BorderWidth / 2, cellInstance.BorderWidth / 2);
-					cellInstance.RectPosition = margin + new Vector2(_cellSize * j, _cellSize * i);
-					blockInstance.Pos = cellInstance.RectPosition;
-
-					_cellGroup.AddChild(cellInstance);
+					blockInstance.Pos = BorderMargin + new Vector2(CellSize * j, CellSize * i);
 
 					var randIndex = random.Next(numbers.Count);
 					
 					if (numbers[randIndex] != 0)
 					{
-						blockInstance.Size = cellInstance.RectSize;
+						blockInstance.Size = new Vector2(CellSize, CellSize);
 						_blockGroup.AddChild(blockInstance as Node);
 						plainArray[count++] = blockInstance.NumberValue = numbers[randIndex];
 						
@@ -189,14 +170,14 @@ namespace Fifteen.Scripts {
 							sprite.GetNode<Label>("Label").Text = sprite.NumberValue.ToString();
 							
 							sprite.RegionRect =
-								new Rect2(textureStartVector + new Vector2( col * _cellSize, row * _cellSize),
-									new Vector2(_cellSize, _cellSize));
+								new Rect2(textureStartVector + new Vector2( col * CellSize, row * CellSize),
+									new Vector2(CellSize, CellSize));
 						}
 						else if (blockInstance is Block block)
 						{
 							block.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, .4f);
 							block.Number.RectSize = blockInstance.Size;
-							block.Number.GetFont("custom_font").Set("size", _cellSize / 2f);
+							block.Number.GetFont("custom_font").Set("size", CellSize / 2f);
 						}
 					}
 					else
@@ -295,7 +276,7 @@ namespace Fifteen.Scripts {
 			}
 			block.IsBeingAnimated = true;
 
-			var startVector = new Vector2(block.Size.x * x + _borderWidth / 2, block.Size.y * y + _borderWidth / 2);
+			var startVector = new Vector2(block.Size.x * x + BorderWidth / 2, block.Size.y * y + BorderWidth / 2);
 			_tween.InterpolateProperty(block as Node, block is Block ? "rect_position" : "position", block.Pos,
 				startVector + movement * block.Size, .5f, Tween.TransitionType.Cubic);
 			_tween.Start();
@@ -319,6 +300,25 @@ namespace Fifteen.Scripts {
 				block.IsBeingAnimated = false;
 				_impactPlayer.Play();
 			}
+		}
+
+		private void OptionsPanelStateChanged(bool opened) 
+		{
+			_refButton.Enabled = ImageMode;
+
+			if (opened)
+			{
+				_gridActive = false;
+				_switchImageButton.Text = ImageMode ? _switchImageButton.ToggleText : _switchImageButton.DefaultText;
+				_refButton.Text = _refImage.Modulate.a is 1f ? _refButton.ToggleText : _refButton.DefaultText;
+			}
+			else _gridActive = !(_refImage.Modulate.a > 0); 
+		}
+
+		private void ReferenceImageClick()
+		{
+			_animationPlayer.CurrentAnimation = "ReferenceFadeOut";
+			_animationPlayer.Play();
 		}
 
 		private void OptionsItemSelected(OptionItems item)
