@@ -3,29 +3,36 @@ using Godot;
 
 namespace Fifteen.Scripts.Storage
 {
-    public static class Preferences
+    public class Preferences
     {
-        public static PreferenceSection RootSection { get; private set; } = new PreferenceSection();
-        public const string FilePath = "user://userdata.bin";
+        public PreferenceSection RootSection { get; private set; } = new PreferenceSection();
+        public readonly string FilePath;
+        public readonly bool Encrypted;
 
-        public static Error LoadData()
+        public Preferences(out Error error, bool encrypted = false, string filePath = "prefs.json")
+        {
+            Encrypted = encrypted;
+            FilePath = "user://" + filePath;
+            error = LoadData();
+        }
+
+        public Error LoadData() 
         {
             File file = new File();
-            var res = file.Open(FilePath, File.ModeFlags.Read);
+            var res = Encrypted ? file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Read, OS.GetUniqueId()) : file.Open(FilePath, File.ModeFlags.Read);
             if (res == Error.Ok)
             {
                 var parseResult = JSON.Parse(file.GetAsText()).Result;
                 if (parseResult is Dictionary dict) RootSection = new PreferenceSection(dict);
             }
-
             file.Close();
             return res;
         }
 
-        public static Error SaveData()
+        public Error SaveData()
         {
             File file = new File();
-            var res = file.Open(FilePath, File.ModeFlags.Write);
+            var res = Encrypted ? file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId()) : file.Open(FilePath, File.ModeFlags.Write);
             
             if (res == Error.Ok) file.StoreString(RootSection.ToJsonString());
             

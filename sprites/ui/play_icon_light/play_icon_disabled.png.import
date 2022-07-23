@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/play_icon.png-9f23abe28ef765d3d2807f0155390e46.stex"
+path="res://.import/play_icon_disabled.png-d5ba9993a8bcde4f23c251f307a3338d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/play_icon/play_icon.png"
-dest_files=[ "res://.import/play_icon.png-9f23abe28ef765d3d2807f0155390e46.stex" ]
+source_file="res://sprites/ui/play_icon_light/play_icon_disabled.png"
+dest_files=[ "res://.import/play_icon_disabled.png-d5ba9993a8bcde4f23c251f307a3338d.stex" ]
 
 [params]
 
@@ -27,7 +27,7 @@ flags/srgb=2
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
-process/invert_color=false
+process/invert_color=true
 process/normal_map_invert_y=false
 stream=false
 size_limit=0

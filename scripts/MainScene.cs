@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Fifteen.Scripts.Special;
 using Fifteen.Scripts.Storage;
 using Godot;
+using Godot.Collections;
 using Vector2 = Godot.Vector2;
 
 namespace Fifteen.Scripts {
@@ -19,19 +20,18 @@ namespace Fifteen.Scripts {
 		private AnimationPlayer _animationPlayer;
 		private PictureReference _refImage;
 		private RectButton  _switchImageButton, _refButton;
+		private DynamicFont _blockFont;
 		[Export] private Texture[] _pictures;
 
-		private IBlock[,] _blocks = new IBlock[0, 0];
+		private Preferences _prefs;
+		private IBlock[,] _blocks;
 		public float BorderWidth {get; private set;}
 		public Vector2 BorderMargin {get; private set;}
 		public float CellSize {get; private set;}
-		
 		private const int MinGridWidth = 3;
 		private const int MaxGridWidth = 7;
 		private const int GridHeightMaxDiff = 2;
-
 		private bool _gridActive;
-		
 		private int _width, _height;
 
 		public int GridWidth
@@ -60,6 +60,7 @@ namespace Fifteen.Scripts {
 			// Loading scenes
 			_blockScene = GD.Load<PackedScene>("res://scenes/Block.tscn");
 			_spriteBlockScene = GD.Load<PackedScene>("res://scenes/SpriteBlock.tscn");
+			_blockFont = GD.Load<DynamicFont>("res://themes/fonts/Block.tres");
 
 			// Getting nodes
 			_cellGroup = GetNode<Node2D>("InteractiveArea/CellGroup");
@@ -78,10 +79,11 @@ namespace Fifteen.Scripts {
 			_controller.OptionsItemSelectedEvent += OptionsItemSelected;
 			_refImage.ClickEvent += ReferenceImageClick;
 
-			Preferences.LoadData();
-			GridWidth = Preferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
-			GridHeight = Preferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
-			ImageMode = Preferences.RootSection.GetBool("picture_mode", false);
+			_prefs = new Preferences(out Error error);
+
+			GridWidth = _prefs.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
+			GridHeight = _prefs.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
+			ImageMode = _prefs.RootSection.GetBool("picture_mode", false);
 
 			if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) 
 				_controller.SetLeftButtonDisabled(true);
@@ -178,7 +180,7 @@ namespace Fifteen.Scripts {
 						{
 							block.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, .4f);
 							block.Number.RectSize = blockInstance.Size;
-							block.Number.GetFont("custom_font").Set("size", CellSize / 2f);
+							_blockFont.Set("size", CellSize / 2f);
 						}
 					}
 					else
@@ -332,8 +334,8 @@ namespace Fifteen.Scripts {
 					break;
 				case OptionItems.SwitchImageMode:
 					_controller.PauseTimer(true);
-					Preferences.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
-					Preferences.SaveData();
+					_prefs.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
+					_prefs.SaveData();
 					_refImage.Modulate = new Color(_refImage.Modulate) { a = 0f };
 					GenerateField(GridWidth, GridHeight);
 					break;
@@ -380,9 +382,9 @@ namespace Fifteen.Scripts {
 			
 			_controller.PauseTimer(true);
 			
-			Preferences.RootSection.SetFloat("f_width", GridWidth);
-			Preferences.RootSection.SetFloat("f_height", GridHeight);
-			Preferences.SaveData();
+			_prefs.RootSection.SetFloat("f_width", GridWidth);
+			_prefs.RootSection.SetFloat("f_height", GridHeight);
+			_prefs.SaveData();
 		}
 		private void AnimationFinished(string name)
 		{

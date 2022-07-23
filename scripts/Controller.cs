@@ -15,7 +15,7 @@ namespace Fifteen.Scripts {
         private Label _timeLabel;
         private Label _label;
         private Label _counterLabel;
-        private TextureButton _moveRightButton, _moveLeftButton;
+        private TextureButton _moveLeftButton, _moveRightButton;
         private AudioStreamPlayer _clickPlayer;
         private PanelContainer _options;
         private TextureButton _optionsButton;
@@ -121,7 +121,7 @@ namespace Fifteen.Scripts {
 
         public override void _Input(InputEvent @event)
         {
-            if (_options.Modulate.a > 0 && @event.IsPressed() && @event is InputEventMouse mouse 
+            if (_options.Modulate.a > 0 && !_uiAnimator.IsPlaying() && @event.IsPressed() && @event is InputEventMouse mouse 
                 && !_options.GetGlobalRect().HasPoint(mouse.Position)) OptionsButtonPressed();
         }
 
@@ -177,7 +177,6 @@ namespace Fifteen.Scripts {
                     break;
                 case NotificationWmGoBackRequest:
                     break;
-                break;
             }
         }
     }

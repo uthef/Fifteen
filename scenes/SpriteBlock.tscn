@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://themes/blockFont.tres" type="Theme" id=1]
+[ext_resource path="res://themes/fonts/Block.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Scripts/SpriteBlock.cs" type="Script" id=2]
 
 [node name="SpriteBlock" type="Sprite"]
@@ -14,4 +14,4 @@ visible = false
 modulate = Color( 1, 1, 1, 0.458824 )
 margin_right = 40.0
 margin_bottom = 14.0
-theme = ExtResource( 1 )
+custom_fonts/font = ExtResource( 1 )
