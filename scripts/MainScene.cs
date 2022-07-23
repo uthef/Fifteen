@@ -24,7 +24,7 @@ namespace Fifteen.Scripts {
 		[Export] private Texture[] _pictures;
 
 		private Preferences _prefs;
-		private IBlock[,] _blocks;
+		private IBlock[,] _blocks = new IBlock[0, 0];
 		public float BorderWidth {get; private set;}
 		public Vector2 BorderMargin {get; private set;}
 		public float CellSize {get; private set;}
