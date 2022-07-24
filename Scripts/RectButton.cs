@@ -24,8 +24,14 @@ namespace Fifteen.Scripts
             set
             {
                 _enabled = value;
-                GetNode<Label>("Label").Modulate = _enabled ? new Color(1f, 1f, 1f)  : new Color(.3f, .3f, .3f);
+                var label = GetNode<Label>("Label");
+                label.Modulate = _enabled ? new Color(label.Modulate) {a = 1} : new Color(label.Modulate) {a = .4f};
             }
+        }
+
+        public override void _EnterTree()
+        {
+            Color = ColorThemes.AppTheme.ForegroundColor;
         }
 
         public override void _Ready()

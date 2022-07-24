@@ -64,6 +64,17 @@ namespace Fifteen.Scripts.Storage
             return new PreferenceSection((Dictionary) _prefs[key]);
         }
 
+        public void SetArray<T>(string key, Array<T> value)
+        {
+            if (!_prefs.Contains(key)) _prefs.Add(key, value);
+            else _prefs[key] = value;
+        }
+
+        public Array<T> GetArray<T>(string key, Array<T> defaultValue) 
+        {
+            return _prefs.Contains(key) && _prefs[key] is Array<T> value ? value : defaultValue;
+        } 
+
         public bool IsSection(string key)
         {
             return _prefs.Contains(key) && _prefs[key] is Dictionary;

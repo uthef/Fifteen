@@ -1,20 +1,13 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://sprites/ui/options_icon_dark/options_icon_filled.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/TextureButtonTheme.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Controller.cs" type="Script" id=2]
-[ext_resource path="res://sprites/ui/options_icon_dark/options_icon_stroked.png" type="Texture" id=3]
 [ext_resource path="res://Scripts/MainScene.cs" type="Script" id=4]
 [ext_resource path="res://themes/fonts/Big.tres" type="DynamicFont" id=5]
-[ext_resource path="res://sprites/ui/play_icon_dark/play_icon_stroked.png" type="Texture" id=6]
-[ext_resource path="res://sprites/ui/play_icon_dark/play_icon.png" type="Texture" id=7]
-[ext_resource path="res://sprites/ui/play_icon_dark/play_icon_disabled.png" type="Texture" id=8]
 [ext_resource path="res://themes/fonts/Default.tres" type="DynamicFont" id=9]
 [ext_resource path="res://audio/impact.wav" type="AudioStream" id=10]
 [ext_resource path="res://audio/click.wav" type="AudioStream" id=11]
-[ext_resource path="res://sprites/ui/back_icon_dark/back_icon_stroked.png" type="Texture" id=12]
-[ext_resource path="res://sprites/ui/back_icon_dark/back_icon.png" type="Texture" id=13]
 [ext_resource path="res://scenes/RectButton.tscn" type="PackedScene" id=14]
-[ext_resource path="res://sprites/ui/options_icon_dark/options_icon_disabled.png" type="Texture" id=15]
 [ext_resource path="res://Scripts/PictureReference.cs" type="Script" id=16]
 [ext_resource path="res://sprites/pictures/dragon.jpg" type="Texture" id=17]
 [ext_resource path="res://sprites/pictures/red_panda.jpg" type="Texture" id=18]
@@ -297,22 +290,21 @@ margin_top = 50.0
 margin_right = -30.0
 
 [node name="BackButton" type="TextureButton" parent="CanvasLayer/TopBox"]
-margin_top = 9.0
-margin_right = 92.0
-margin_bottom = 101.0
+margin_top = 55.0
+margin_bottom = 55.0
 size_flags_vertical = 4
-texture_normal = ExtResource( 12 )
-texture_pressed = ExtResource( 13 )
+script = ExtResource( 1 )
+_assetName = "back_icon"
 
 [node name="VBox" type="VBoxContainer" parent="CanvasLayer/TopBox"]
-margin_left = 96.0
-margin_right = 564.0
+margin_left = 4.0
+margin_right = 656.0
 margin_bottom = 111.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Time" type="Label" parent="CanvasLayer/TopBox/VBox"]
-margin_right = 468.0
+margin_right = 652.0
 margin_bottom = 46.0
 theme = ExtResource( 27 )
 custom_fonts/font = ExtResource( 9 )
@@ -322,7 +314,7 @@ valign = 1
 
 [node name="Counter" type="Label" parent="CanvasLayer/TopBox/VBox"]
 margin_top = 50.0
-margin_right = 468.0
+margin_right = 652.0
 margin_bottom = 111.0
 theme = ExtResource( 27 )
 custom_fonts/font = ExtResource( 5 )
@@ -331,16 +323,15 @@ align = 1
 valign = 1
 
 [node name="OptionsButton" type="TextureButton" parent="CanvasLayer/TopBox"]
-margin_left = 568.0
-margin_top = 9.0
+margin_left = 660.0
+margin_top = 55.0
 margin_right = 660.0
-margin_bottom = 101.0
+margin_bottom = 55.0
 size_flags_vertical = 4
 toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource( 3 )
-texture_pressed = ExtResource( 1 )
-texture_disabled = ExtResource( 15 )
+script = ExtResource( 1 )
+_assetName = "options_icon"
 
 [node name="HBox" type="HBoxContainer" parent="CanvasLayer"]
 anchor_top = 1.0
@@ -352,18 +343,16 @@ margin_bottom = -50.0
 grow_vertical = 0
 
 [node name="MoveLeftButton" type="TextureButton" parent="CanvasLayer/HBox"]
-margin_right = 92.0
-margin_bottom = 92.0
+margin_bottom = 46.0
 rect_pivot_offset = Vector2( -1723, -849 )
-texture_normal = ExtResource( 6 )
-texture_pressed = ExtResource( 7 )
-texture_disabled = ExtResource( 8 )
 flip_h = true
+script = ExtResource( 1 )
+_assetName = "play_icon"
 
 [node name="Label" type="Label" parent="CanvasLayer/HBox"]
-margin_left = 96.0
-margin_right = 564.0
-margin_bottom = 92.0
+margin_left = 4.0
+margin_right = 656.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 27 )
@@ -373,24 +362,23 @@ align = 1
 valign = 1
 
 [node name="MoveRightButton" type="TextureButton" parent="CanvasLayer/HBox"]
-margin_left = 568.0
+margin_left = 660.0
 margin_right = 660.0
-margin_bottom = 92.0
+margin_bottom = 46.0
 focus_mode = 0
 theme = ExtResource( 27 )
 enabled_focus_mode = 0
-texture_normal = ExtResource( 6 )
-texture_pressed = ExtResource( 7 )
-texture_disabled = ExtResource( 8 )
+script = ExtResource( 1 )
+_assetName = "play_icon"
 
 [node name="OptionsMenu" type="PanelContainer" parent="CanvasLayer"]
 visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.55
 anchor_right = 1.0
-margin_top = 140.0
+margin_top = 170.0
 margin_right = -60.0
-margin_bottom = 450.0
+margin_bottom = 480.0
 rect_pivot_offset = Vector2( 360, 1 )
 theme = ExtResource( 27 )
 __meta__ = {

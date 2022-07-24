@@ -19,7 +19,7 @@ namespace Fifteen.Scripts {
                     DrawRect(
                         new Rect2(_mainScene.BorderMargin + new Vector2(_mainScene.CellSize * j, _mainScene.CellSize * i), 
                         new Vector2(_mainScene.CellSize, _mainScene.CellSize)), 
-                        new Color(1, 1, 1), 
+                        ColorThemes.AppTheme.ForegroundColor, 
                         false, 
                         _mainScene.BorderWidth
                     );

@@ -23,7 +23,8 @@ namespace Fifteen.Scripts {
 		private DynamicFont _blockFont;
 		[Export] private Texture[] _pictures;
 
-		private Preferences _prefs;
+		private Preferences Prefs;
+
 		private IBlock[,] _blocks = new IBlock[0, 0];
 		public float BorderWidth {get; private set;}
 		public Vector2 BorderMargin {get; private set;}
@@ -55,12 +56,28 @@ namespace Fifteen.Scripts {
 
 		public bool ImageMode = false;
 
+		public override void _EnterTree() 
+		{
+			// Loading resources
+			_blockFont = GD.Load<DynamicFont>("res://themes/fonts/Block.tres");
+			Prefs = new Preferences(out Error error);
+
+			if (!Prefs.RootSection.GetBool("dark_theme", true)) {
+				var theme = GD.Load<Theme>("res://themes/dark.tres");
+				ColorThemes.AppTheme = new ColorThemes.Light();
+				theme.Set("Label/colors/font_color", ColorThemes.AppTheme.ForegroundColor);
+				StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
+				styleBox.BgColor = ColorThemes.AppTheme.PanelColor;
+				_blockFont.OutlineSize = ColorThemes.AppTheme.BlockNumberOutlineWidth;
+				VisualServer.SetDefaultClearColor(ColorThemes.AppTheme.BackgroundColor);
+			}
+		}
+
 		public override void _Ready()
 		{
 			// Loading scenes
 			_blockScene = GD.Load<PackedScene>("res://scenes/Block.tscn");
 			_spriteBlockScene = GD.Load<PackedScene>("res://scenes/SpriteBlock.tscn");
-			_blockFont = GD.Load<DynamicFont>("res://themes/fonts/Block.tres");
 
 			// Getting nodes
 			_cellGroup = GetNode<Node2D>("InteractiveArea/CellGroup");
@@ -79,11 +96,9 @@ namespace Fifteen.Scripts {
 			_controller.OptionsItemSelectedEvent += OptionsItemSelected;
 			_refImage.ClickEvent += ReferenceImageClick;
 
-			_prefs = new Preferences(out Error error);
-
-			GridWidth = _prefs.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
-			GridHeight = _prefs.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
-			ImageMode = _prefs.RootSection.GetBool("picture_mode", false);
+			GridWidth = Prefs.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
+			GridHeight = Prefs.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
+			ImageMode = Prefs.RootSection.GetBool("picture_mode", false);
 
 			if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) 
 				_controller.SetLeftButtonDisabled(true);
@@ -122,7 +137,7 @@ namespace Fifteen.Scripts {
 			BorderWidth = 3f;
 			BorderMargin = new Vector2(BorderWidth / 2, BorderWidth / 2);
 
-			float hue = (float)random.NextDouble(), saturationStep = 1f / _blocks.Length;
+			float hue = (float)random.NextDouble(), saturationStep = ColorThemes.AppTheme.MaxBlockNumberSaturation / _blocks.Length;
 			int emptyCellRow = 0;
 
 			foreach (Node child in _blockGroup.GetChildren()) child.QueueFree(); 
@@ -178,7 +193,7 @@ namespace Fifteen.Scripts {
 						}
 						else if (blockInstance is Block block)
 						{
-							block.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, .4f);
+							block.Color = Color.FromHsv(hue, blockInstance.NumberValue * saturationStep, ColorThemes.AppTheme.BlockBrightness);
 							block.Number.RectSize = blockInstance.Size;
 							_blockFont.Set("size", CellSize / 2f);
 						}
@@ -334,8 +349,8 @@ namespace Fifteen.Scripts {
 					break;
 				case OptionItems.SwitchImageMode:
 					_controller.PauseTimer(true);
-					_prefs.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
-					_prefs.SaveData();
+					Prefs.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
+					Prefs.SaveData();
 					_refImage.Modulate = new Color(_refImage.Modulate) { a = 0f };
 					GenerateField(GridWidth, GridHeight);
 					break;
@@ -382,9 +397,9 @@ namespace Fifteen.Scripts {
 			
 			_controller.PauseTimer(true);
 			
-			_prefs.RootSection.SetFloat("f_width", GridWidth);
-			_prefs.RootSection.SetFloat("f_height", GridHeight);
-			_prefs.SaveData();
+			Prefs.RootSection.SetFloat("f_width", GridWidth);
+			Prefs.RootSection.SetFloat("f_height", GridHeight);
+			Prefs.SaveData();
 		}
 		private void AnimationFinished(string name)
 		{
