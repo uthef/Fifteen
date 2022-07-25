@@ -10,4 +10,5 @@ public interface IColorTheme
     public Color BlockNumberOutlineColor {get;}
     public int BlockNumberOutlineWidth {get;}
     public float MaxBlockNumberSaturation {get;}
+    public bool InvertSpriteColors { get; }
 }

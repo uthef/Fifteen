@@ -51,7 +51,9 @@ namespace Fifteen.Scripts
         public static void SwitchTheme(ColorThemes.Values colorTheme) 
         {
             var theme = GD.Load<Theme>("res://themes/dark.tres");
+            var shader = GD.Load<ShaderMaterial>("res://materials/ColorInversionMaterial.tres");
             ColorThemes.AppTheme = ColorThemes.GetTheme(colorTheme);
+            shader.Set("shader_param/enabled", ColorThemes.AppTheme.InvertSpriteColors);
             theme.Set("Label/colors/font_color", ColorThemes.AppTheme.ForegroundColor);
             StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
             styleBox.BgColor = ColorThemes.AppTheme.PanelColor;

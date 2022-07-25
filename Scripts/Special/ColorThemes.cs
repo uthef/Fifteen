@@ -30,6 +30,7 @@ public static class ColorThemes {
         public Color BlockNumberOutlineColor {get;} = new Color(1, 1, 1);
         public int BlockNumberOutlineWidth {get;} = 0;
         public float MaxBlockNumberSaturation {get;} = .7f;
+        public bool InvertSpriteColors { get; } = true;
 
     }
 
@@ -44,5 +45,6 @@ public static class ColorThemes {
         public Color BlockNumberOutlineColor {get;} = new Color(0, 0, 0);
         public int BlockNumberOutlineWidth {get;} = 3;
         public float MaxBlockNumberSaturation {get;} = 1f;
+        public bool InvertSpriteColors { get; } = false;
     }
 }
