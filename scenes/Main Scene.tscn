@@ -301,7 +301,6 @@ script = ExtResource( 4 )
 _pictures = [ ExtResource( 7 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 17 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ), ExtResource( 11 ), ExtResource( 13 ) ]
 
 [node name="InteractiveArea" type="Node2D" parent="."]
-position = Vector2( 720, 0 )
 
 [node name="BlockGroup" type="Node2D" parent="InteractiveArea"]
 
@@ -319,8 +318,6 @@ playback_speed = 2.0
 playback/speed = 2.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-offset = Vector2( 720, 0 )
-transform = Transform2D( 1, 0, 0, 1, 720, 0 )
 script = ExtResource( 2 )
 
 [node name="TopBox" type="HBoxContainer" parent="CanvasLayer"]
@@ -474,6 +471,7 @@ anims/ResetButtonPressed = SubResource( 8 )
 anims/SwitchImageModeButtonPressed = SubResource( 9 )
 
 [node name="Slide" type="Sprite" parent="."]
+position = Vector2( -720, 0 )
 centered = false
 flip_v = true
 

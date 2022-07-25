@@ -108,7 +108,7 @@ namespace Fifteen.Scripts {
 
         private void OptionsButtonPressed(bool auto = false)
         {
-            if (_options.Modulate.a > 0)
+            if (_options.Modulate.a > .5f)
             {
                 if (!auto) PlayClickSound();
                 _optionsButton.Pressed = false;
