@@ -1,5 +1,7 @@
 ﻿using Godot;
 using Godot.Collections;
+using System;
+using Fifteen.Scripts.Storage;
 
 namespace Fifteen.Scripts.Storage
 {
@@ -65,6 +67,17 @@ namespace Fifteen.Scripts.Storage
         }
 
         public void SetArray<T>(string key, Array<T> value)
+        {
+            if (!_prefs.Contains(key)) _prefs.Add(key, value);
+            else _prefs[key] = value;
+        }
+
+        public ColorThemes.Values GetTheme(string key, ColorThemes.Values defaultValue)
+        {
+            return _prefs.Contains(key) && Enum.TryParse(_prefs[key].ToString(), out ColorThemes.Values value) ? value : defaultValue;
+        }
+
+        public void SetTheme(string key, ColorThemes.Values value)
         {
             if (!_prefs.Contains(key)) _prefs.Add(key, value);
             else _prefs[key] = value;

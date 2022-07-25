@@ -1,9 +1,27 @@
 using Godot;
 
 public static class ColorThemes {
-    public static IColorTheme AppTheme = new Dark();
-    public class Light : IColorTheme
+    public static IColorTheme AppTheme;
+
+    public enum Values
     {
+        Light, Dark
+    }
+
+    public static IColorTheme GetTheme(ColorThemes.Values theme)
+    {
+        switch (theme)
+        {
+            case Values.Light:
+                return new Light();
+            default:
+                return new Dark();
+        }
+    }
+
+    private class Light : IColorTheme
+    {
+        public ColorThemes.Values Value {get;} = ColorThemes.Values.Light;
         public string AssetPostfix {get;} = "light";
         public Color BackgroundColor {get;} = Color.FromHsv(0, 0, .9f);
         public Color ForegroundColor {get;} = new Color(0, 0, 0);
@@ -12,10 +30,12 @@ public static class ColorThemes {
         public Color BlockNumberOutlineColor {get;} = new Color(1, 1, 1);
         public int BlockNumberOutlineWidth {get;} = 0;
         public float MaxBlockNumberSaturation {get;} = .7f;
+
     }
 
-    public class Dark : IColorTheme
+   private class Dark : IColorTheme
     {
+        public ColorThemes.Values Value {get;} = ColorThemes.Values.Dark;
         public string AssetPostfix {get;} = "dark";
         public Color BackgroundColor {get;} = Color.FromHsv(0, 0, .1f);
         public Color ForegroundColor {get;} = new Color(1, 1, 1);

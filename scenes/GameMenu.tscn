@@ -78,7 +78,7 @@ margin_right = 432.0
 margin_bottom = 268.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
-text = "Options"
+text = "Switch Theme"
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 anchor_left = 1.0
@@ -105,4 +105,5 @@ anims/FadeIn = SubResource( 1 )
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Button" to="." method="FifteenButtonPressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Button2" to="." method="SprucesButtonPressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Options" to="." method="OptionsButtonPressed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="AnimationFinished"]

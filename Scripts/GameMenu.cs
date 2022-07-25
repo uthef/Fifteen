@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using Fifteen.Scripts.Storage;
-using System.Threading.Tasks;
 
 namespace Fifteen.Scripts 
 {
@@ -24,15 +23,7 @@ namespace Fifteen.Scripts
 
             if (GlobalSettings.StoredPreferences is null) {
                 GlobalSettings.StoredPreferences = new Preferences(out Error error);
-                
-                if (!GlobalSettings.StoredPreferences.RootSection.GetBool("dark_theme", true)) {
-                    var theme = GD.Load<Theme>("res://themes/dark.tres");
-                    ColorThemes.AppTheme = new ColorThemes.Light();
-                    theme.Set("Label/colors/font_color", ColorThemes.AppTheme.ForegroundColor);
-                    StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
-                    styleBox.BgColor = ColorThemes.AppTheme.PanelColor;
-                    VisualServer.SetDefaultClearColor(ColorThemes.AppTheme.BackgroundColor);
-                }
+                SwitchTheme(GlobalSettings.StoredPreferences.RootSection.GetTheme("theme", ColorThemes.Values.Dark));
             }
         }
 
@@ -55,6 +46,24 @@ namespace Fifteen.Scripts
         {
             _slide.QueueFree();
             GlobalSettings.FrameBuffer.Dispose();
+        }
+
+        private void SwitchTheme(ColorThemes.Values colorTheme) 
+        {
+            var theme = GD.Load<Theme>("res://themes/dark.tres");
+            ColorThemes.AppTheme = ColorThemes.GetTheme(colorTheme);
+            theme.Set("Label/colors/font_color", ColorThemes.AppTheme.ForegroundColor);
+            StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
+            styleBox.BgColor = ColorThemes.AppTheme.PanelColor;
+            VisualServer.SetDefaultClearColor(ColorThemes.AppTheme.BackgroundColor);
+            GlobalSettings.StoredPreferences.RootSection.SetTheme("theme", ColorThemes.AppTheme.Value);
+            GlobalSettings.StoredPreferences.Save();
+        }
+
+        private void OptionsButtonPressed()
+        {
+            if (ColorThemes.AppTheme.Value is ColorThemes.Values.Dark) SwitchTheme(ColorThemes.Values.Light);    
+            else SwitchTheme(ColorThemes.Values.Dark);   
         }
     }
 }
