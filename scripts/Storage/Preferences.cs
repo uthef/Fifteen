@@ -13,10 +13,10 @@ namespace Fifteen.Scripts.Storage
         {
             Encrypted = encrypted;
             FilePath = "user://" + filePath;
-            error = LoadData();
+            error = Load();
         }
 
-        public Error LoadData() 
+        public Error Load() 
         {
             File file = new File();
             var res = Encrypted ? file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Read, OS.GetUniqueId()) : file.Open(FilePath, File.ModeFlags.Read);
@@ -29,7 +29,7 @@ namespace Fifteen.Scripts.Storage
             return res;
         }
 
-        public Error SaveData()
+        public Error Save()
         {
             File file = new File();
             var res = Encrypted ? file.OpenEncryptedWithPass(FilePath, File.ModeFlags.Write, OS.GetUniqueId()) : file.Open(FilePath, File.ModeFlags.Write);

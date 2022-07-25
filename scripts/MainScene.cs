@@ -23,8 +23,6 @@ namespace Fifteen.Scripts {
 		private DynamicFont _blockFont;
 		[Export] private Texture[] _pictures;
 
-		private Preferences Prefs;
-
 		private IBlock[,] _blocks = new IBlock[0, 0];
 		public float BorderWidth {get; private set;}
 		public Vector2 BorderMargin {get; private set;}
@@ -60,17 +58,7 @@ namespace Fifteen.Scripts {
 		{
 			// Loading resources
 			_blockFont = GD.Load<DynamicFont>("res://themes/fonts/Block.tres");
-			Prefs = new Preferences(out Error error);
-
-			if (!Prefs.RootSection.GetBool("dark_theme", true)) {
-				var theme = GD.Load<Theme>("res://themes/dark.tres");
-				ColorThemes.AppTheme = new ColorThemes.Light();
-				theme.Set("Label/colors/font_color", ColorThemes.AppTheme.ForegroundColor);
-				StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
-				styleBox.BgColor = ColorThemes.AppTheme.PanelColor;
-				_blockFont.OutlineSize = ColorThemes.AppTheme.BlockNumberOutlineWidth;
-				VisualServer.SetDefaultClearColor(ColorThemes.AppTheme.BackgroundColor);
-			}
+			_blockFont.OutlineSize = ColorThemes.AppTheme.BlockNumberOutlineWidth;
 		}
 
 		public override void _Ready()
@@ -96,22 +84,22 @@ namespace Fifteen.Scripts {
 			_controller.OptionsItemSelectedEvent += OptionsItemSelected;
 			_refImage.ClickEvent += ReferenceImageClick;
 
-			GridWidth = Prefs.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
-			GridHeight = Prefs.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
-			ImageMode = Prefs.RootSection.GetBool("picture_mode", false);
+			GridWidth = GlobalSettings.StoredPreferences.RootSection.GetInt32("f_width", 4, MaxGridWidth, MinGridWidth);
+			GridHeight = GlobalSettings.StoredPreferences.RootSection.GetInt32("f_height", GridWidth, GridWidth + GridHeightMaxDiff, GridWidth);
+			ImageMode = GlobalSettings.StoredPreferences.RootSection.GetBool("picture_mode", false);
 
 			if (GridWidth == MinGridWidth && GridHeight == MinGridWidth) 
 				_controller.SetLeftButtonDisabled(true);
 			else if (GridWidth == MaxGridWidth && GridHeight == MaxGridWidth + GridHeightMaxDiff)
 				_controller.SetRightButtonDisabled(true);
 
-			GenerateField(GridWidth, GridHeight);
+			GenerateField(GridWidth, GridHeight, false, true);
 		}
 
 		#region Logic
-		public void GenerateField(int width, int height, bool reverseAnimation = false)
+		public void GenerateField(int width, int height, bool reverseAnimation = false, bool skipAnimation = false)
 		{
-			if (_blocks.Length != 0)
+			if (_blocks.Length != 0 && !skipAnimation)
 			{
 				_gridActive = false;
 				_blocks = new IBlock[0, 0];
@@ -241,8 +229,12 @@ namespace Fifteen.Scripts {
 					(_blocks[row, nextColumn].Pos, _blocks[row, column].Pos);
 			}
 
-			_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeIn{(reverseAnimation ? "" : "Reversed")}";
-			_animationPlayer.Play();
+			if (!skipAnimation)
+			{
+				_animationPlayer.CurrentAnimation = $"InteractiveAreaFadeIn{(reverseAnimation ? "" : "Reversed")}";
+				_animationPlayer.Play();
+			}
+			else _gridActive = true;
 		}
 		public bool IsOrderCorrect()
 		{
@@ -349,8 +341,8 @@ namespace Fifteen.Scripts {
 					break;
 				case OptionItems.SwitchImageMode:
 					_controller.PauseTimer(true);
-					Prefs.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
-					Prefs.SaveData();
+					GlobalSettings.StoredPreferences.RootSection.SetBool("picture_mode", ImageMode = !ImageMode);
+					GlobalSettings.StoredPreferences.Save();
 					_refImage.Modulate = new Color(_refImage.Modulate) { a = 0f };
 					GenerateField(GridWidth, GridHeight);
 					break;
@@ -368,7 +360,7 @@ namespace Fifteen.Scripts {
 					break;
 			}
 		}
-		
+
 		private void MoveButtonPressed(bool whatButton)
 		{
 			if (whatButton)
@@ -397,9 +389,9 @@ namespace Fifteen.Scripts {
 			
 			_controller.PauseTimer(true);
 			
-			Prefs.RootSection.SetFloat("f_width", GridWidth);
-			Prefs.RootSection.SetFloat("f_height", GridHeight);
-			Prefs.SaveData();
+			GlobalSettings.StoredPreferences.RootSection.SetFloat("f_width", GridWidth);
+			GlobalSettings.StoredPreferences.RootSection.SetFloat("f_height", GridHeight);
+			GlobalSettings.StoredPreferences.Save();
 		}
 		private void AnimationFinished(string name)
 		{

@@ -1,23 +1,10 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scripts/TextureButtonTheme.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Controller.cs" type="Script" id=2]
-[ext_resource path="res://sprites/pictures/doll.jpg" type="Texture" id=3]
-[ext_resource path="res://Scripts/MainScene.cs" type="Script" id=4]
 [ext_resource path="res://themes/fonts/Big.tres" type="DynamicFont" id=5]
-[ext_resource path="res://sprites/pictures/dragon.jpg" type="Texture" id=6]
-[ext_resource path="res://sprites/pictures/carnival.jpg" type="Texture" id=7]
-[ext_resource path="res://sprites/pictures/red_panda.jpg" type="Texture" id=8]
 [ext_resource path="res://themes/fonts/Default.tres" type="DynamicFont" id=9]
-[ext_resource path="res://audio/impact.wav" type="AudioStream" id=10]
-[ext_resource path="res://sprites/pictures/road.jpg" type="Texture" id=11]
-[ext_resource path="res://sprites/pictures/people.jpg" type="Texture" id=12]
-[ext_resource path="res://sprites/pictures/train.jpg" type="Texture" id=13]
 [ext_resource path="res://scenes/RectButton.tscn" type="PackedScene" id=14]
-[ext_resource path="res://sprites/pictures/monkey.jpg" type="Texture" id=15]
-[ext_resource path="res://Scripts/PictureReference.cs" type="Script" id=16]
-[ext_resource path="res://sprites/pictures/lego.jpg" type="Texture" id=17]
-[ext_resource path="res://Scripts/CellGroup.cs" type="Script" id=26]
 [ext_resource path="res://themes/dark.tres" type="Theme" id=27]
 
 [sub_resource type="Animation" id=2]
@@ -130,72 +117,9 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=11]
 resource_name = "ReferenceFadeIn"
-tracks/0/type = "value"
-tracks/0/path = NodePath("InteractiveArea/Reference:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
 
 [sub_resource type="Animation" id=12]
 resource_name = "ReferenceFadeOut"
-tracks/0/type = "value"
-tracks/0/path = NodePath("InteractiveArea/Reference:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=13]
-resource_name = "FadeOut"
-tracks/0/type = "value"
-tracks/0/path = NodePath("CanvasLayer:offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.5, 0.5 ),
-"update": 0,
-"values": [ Vector2( 720, 0 ), Vector2( 0, 0 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("InteractiveArea:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.5, 0.5 ),
-"update": 0,
-"values": [ Vector2( 720, 0 ), Vector2( 0, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Slide:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.5, 0.5 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( -720, 0 ) ]
-}
 
 [sub_resource type="Animation" id=6]
 resource_name = "MenuFadeIn"
@@ -297,30 +221,16 @@ tracks/0/keys = {
 }
 
 [node name="Main Scene" type="Node"]
-script = ExtResource( 4 )
-_pictures = [ ExtResource( 7 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 17 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 8 ), ExtResource( 11 ), ExtResource( 13 ) ]
 
 [node name="InteractiveArea" type="Node2D" parent="."]
-position = Vector2( 720, 0 )
-
-[node name="BlockGroup" type="Node2D" parent="InteractiveArea"]
-
-[node name="Reference" type="Sprite" parent="InteractiveArea"]
 modulate = Color( 1, 1, 1, 0 )
-centered = false
-region_enabled = true
-script = ExtResource( 16 )
-
-[node name="CellGroup" type="Node2D" parent="InteractiveArea"]
-script = ExtResource( 26 )
+position = Vector2( -300, 0 )
 
 [node name="Tween" type="Tween" parent="."]
 playback_speed = 2.0
 playback/speed = 2.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-offset = Vector2( 720, 0 )
-transform = Transform2D( 1, 0, 0, 1, 720, 0 )
 script = ExtResource( 2 )
 
 [node name="TopBox" type="HBoxContainer" parent="CanvasLayer"]
@@ -416,9 +326,9 @@ visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.55
 anchor_right = 1.0
-margin_top = 170.0
+margin_top = 140.0
 margin_right = -60.0
-margin_bottom = 480.0
+margin_bottom = 450.0
 rect_pivot_offset = Vector2( 360, 1 )
 theme = ExtResource( 27 )
 __meta__ = {
@@ -451,10 +361,6 @@ _enabled = false
 DefaultText = "Show reference"
 ToggleText = "Hide reference"
 
-[node name="ImpactPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
-bus = "HighPass"
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 6.0
 anims/InteractiveAreaFadeIn = SubResource( 2 )
@@ -466,7 +372,6 @@ anims/ReferenceFadeOut = SubResource( 12 )
 
 [node name="UIAnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 6.0
-anims/FadeOut = SubResource( 13 )
 anims/MenuFadeIn = SubResource( 6 )
 anims/MenuFadeOut = SubResource( 7 )
 anims/ReferenceButtonPressed = SubResource( 10 )
@@ -479,7 +384,7 @@ flip_v = true
 
 [connection signal="tween_completed" from="Tween" to="." method="TweenCompleted"]
 [connection signal="pressed" from="CanvasLayer/TopBox/BackButton" to="CanvasLayer" method="BackButtonPressed"]
-[connection signal="pressed" from="CanvasLayer/TopBox/OptionsButton" to="CanvasLayer" method="OptionsButtonPressed" binds= [ false ]]
+[connection signal="pressed" from="CanvasLayer/TopBox/OptionsButton" to="CanvasLayer" method="OptionsButtonPressed"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveLeftButton" to="CanvasLayer" method="MoveLeftButtonPressed"]
 [connection signal="button_down" from="CanvasLayer/HBox/MoveRightButton" to="CanvasLayer" method="MoveRightButtonPressed"]
 [connection signal="gui_input" from="CanvasLayer/OptionsMenu/VBoxContainer/Reset" to="CanvasLayer" method="ResetButtonInput" binds= [ "Reset" ]]

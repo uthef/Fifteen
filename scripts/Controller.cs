@@ -24,7 +24,6 @@ namespace Fifteen.Scripts {
         public delegate void MoveButtonPressedEventHandler(bool whatButton);
         public delegate void OptionsItemSelectedEventHandler(OptionItems item);
         public delegate void OptionsPanelStateChangedEventHandler(bool opened);
-        
         public event OptionsItemSelectedEventHandler OptionsItemSelectedEvent;
         public event MoveButtonPressedEventHandler MoveButtonPressedEvent;
         public event OptionsPanelStateChangedEventHandler OptionsPanelStateChanged;
@@ -44,10 +43,18 @@ namespace Fifteen.Scripts {
             _label = GetNode<Label>("HBox/Label");
             _moveRightButton = GetNode<TextureButton>("HBox/MoveRightButton");
             _moveLeftButton = GetNode<TextureButton>("HBox/MoveLeftButton");
-            _clickPlayer = GetNode<AudioStreamPlayer>("../ClickPlayer");
+            _clickPlayer = GetTree().Root.GetNode<AudioStreamPlayer>("/root/ClickPlayer");
             _options = GetNode<PanelContainer>("OptionsMenu");
             _optionsButton = GetNode<TextureButton>("TopBox/OptionsButton");
             _uiAnimator = GetNode<AnimationPlayer>("../UIAnimationPlayer");
+
+            var imageTexture = new ImageTexture();
+            imageTexture.CreateFromImage(GlobalSettings.FrameBuffer);
+            GetNode<Sprite>("../Slide").Texture = imageTexture;
+
+            _uiAnimator.CurrentAnimation = "FadeOut";
+            _uiAnimator.PlaybackSpeed = 3;
+            _uiAnimator.Play();
 
             SetProcess(false);
         }
@@ -99,18 +106,18 @@ namespace Fifteen.Scripts {
             PlayClickSound();
         }
 
-        private void OptionsButtonPressed()
+        private void OptionsButtonPressed(bool auto = false)
         {
             if (_options.Modulate.a > 0)
             {
-                PlayClickSound();
+                if (!auto) PlayClickSound();
                 _optionsButton.Pressed = false;
                 _uiAnimator.CurrentAnimation = "MenuFadeOut";
                 _uiAnimator.Play();
             }
             else if (_options.Modulate.a <= 1)
             {
-                PlayClickSound();
+                if (!auto) PlayClickSound();
                 OptionsPanelStateChanged?.Invoke(true);
                 _options.Visible = true;
                 _uiAnimator.CurrentAnimation = "MenuFadeIn";
@@ -122,7 +129,7 @@ namespace Fifteen.Scripts {
         public override void _Input(InputEvent @event)
         {
             if (_options.Modulate.a > 0 && !_uiAnimator.IsPlaying() && @event.IsPressed() && @event is InputEventMouse mouse 
-                && !_options.GetGlobalRect().HasPoint(mouse.Position)) OptionsButtonPressed();
+                && !_options.GetGlobalRect().HasPoint(mouse.Position)) OptionsButtonPressed(true);
         }
 
         private void UIAnimationFinished(string name)
@@ -136,6 +143,11 @@ namespace Fifteen.Scripts {
                     OptionsPanelStateChanged?.Invoke(false);
                     _options.Visible = false;
                     MenuVisible = _menuBlocked = false;
+                    break;
+                case "FadeOut":
+                    _uiAnimator.PlaybackSpeed *= 2;
+                    GetNode<Sprite>("../Slide").QueueFree();
+                    GlobalSettings.FrameBuffer.Dispose();
                     break;
                 default:
                     if (name.EndsWith("Pressed"))
@@ -168,6 +180,14 @@ namespace Fifteen.Scripts {
             }
         }
 
+        private void BackButtonPressed() 
+		{
+            PlayClickSound();
+            GlobalSettings.FrameBuffer = GetViewport().GetTexture().GetData();
+            GetTree().Root.CallDeferred("add_child", GD.Load<PackedScene>("res://scenes/GameMenu.tscn").Instance<Node>());
+            GetTree().Root.GetNode("Main Scene").QueueFree();
+		}
+
         public override void _Notification(int notification)
         {
             switch (notification)
@@ -176,6 +196,7 @@ namespace Fifteen.Scripts {
                     if (TimerActive) PauseTimer();
                     break;
                 case NotificationWmGoBackRequest:
+                    BackButtonPressed();
                     break;
             }
         }
