@@ -23,7 +23,7 @@ namespace Fifteen.Scripts
 
             if (GlobalSettings.StoredPreferences is null) {
                 GlobalSettings.StoredPreferences = new Preferences(out Error error);
-                SwitchTheme(GlobalSettings.StoredPreferences.RootSection.GetTheme("theme", ColorThemes.Values.Dark));
+                SwitchTheme((ColorThemes.Values) GlobalSettings.StoredPreferences.RootSection.GetInt32("theme", (int) ColorThemes.Values.Dark));
             }
         }
 
@@ -48,7 +48,7 @@ namespace Fifteen.Scripts
             GlobalSettings.FrameBuffer.Dispose();
         }
 
-        private void SwitchTheme(ColorThemes.Values colorTheme) 
+        public static void SwitchTheme(ColorThemes.Values colorTheme) 
         {
             var theme = GD.Load<Theme>("res://themes/dark.tres");
             ColorThemes.AppTheme = ColorThemes.GetTheme(colorTheme);
@@ -56,7 +56,7 @@ namespace Fifteen.Scripts
             StyleBoxFlat styleBox = (StyleBoxFlat) theme.Get("PanelContainer/styles/panel");
             styleBox.BgColor = ColorThemes.AppTheme.PanelColor;
             VisualServer.SetDefaultClearColor(ColorThemes.AppTheme.BackgroundColor);
-            GlobalSettings.StoredPreferences.RootSection.SetTheme("theme", ColorThemes.AppTheme.Value);
+            GlobalSettings.StoredPreferences.RootSection.SetFloat("theme", (int) ColorThemes.AppTheme.Value);
             GlobalSettings.StoredPreferences.Save();
         }
 

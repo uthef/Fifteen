@@ -5,7 +5,7 @@ public static class ColorThemes {
 
     public enum Values
     {
-        Light, Dark
+        Dark, Light
     }
 
     public static IColorTheme GetTheme(ColorThemes.Values theme)
