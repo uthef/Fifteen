@@ -1,10 +1,13 @@
+using Fifteen.Theming;
+using Fifteen.Nodes;
 using Godot;
-using System;
 
-namespace Fifteen.Scripts.Storage {
+namespace Fifteen.Storage
+{
     public static class GlobalSettings
     {
-        public static Preferences StoredPreferences;
-        public static Image FrameBuffer;
+        public static PreferenceManager Preferences;
+        public static IColorTheme CurrentTheme = 
+            ColorThemes.GetTheme(PredefinedTheme.Dark);
     }
 }

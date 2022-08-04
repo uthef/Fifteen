@@ -1,0 +1,13 @@
+[remap]
+
+importer="image"
+type="Image"
+path="res://.import/House.jpg-c4f7141951c196c5b575df725f09e163.image"
+
+[deps]
+
+source_file="res://Images/Pictures/House.jpg"
+dest_files=[ "res://.import/House.jpg-c4f7141951c196c5b575df725f09e163.image" ]
+
+[params]
+

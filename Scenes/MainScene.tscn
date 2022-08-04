@@ -1,0 +1,154 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Themes/DynamicFonts/Default.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Themes/Default.tres" type="Theme" id=2]
+[ext_resource path="res://Images/UI/BackIcon/normal.png" type="Texture" id=3]
+[ext_resource path="res://Images/UI/BackIcon/disabled.png" type="Texture" id=4]
+[ext_resource path="res://Images/UI/BackIcon/pressed.png" type="Texture" id=5]
+[ext_resource path="res://Images/UI/OptionsIcon/pressed.png" type="Texture" id=6]
+[ext_resource path="res://Images/UI/OptionsIcon/normal.png" type="Texture" id=7]
+[ext_resource path="res://Images/UI/OptionsIcon/disabled.png" type="Texture" id=8]
+[ext_resource path="res://Themes/DynamicFonts/Bold.tres" type="DynamicFont" id=9]
+[ext_resource path="res://Images/UI/PlayIcon/normal.png" type="Texture" id=10]
+[ext_resource path="res://Images/UI/PlayIcon/pressed.png" type="Texture" id=11]
+[ext_resource path="res://Images/UI/PlayIcon/disabled.png" type="Texture" id=12]
+[ext_resource path="res://Scripts/Nodes/MainScene.cs" type="Script" id=13]
+[ext_resource path="res://Materials/IconColorInversion.tres" type="Material" id=14]
+
+[node name="MainScene" type="Node2D"]
+script = ExtResource( 13 )
+MenuItemHeight = 120.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BackButton" type="TextureButton" parent="CanvasLayer" groups=["Buttons"]]
+material = ExtResource( 14 )
+margin_right = 156.0
+margin_bottom = 188.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 5 )
+texture_disabled = ExtResource( 4 )
+expand = true
+stretch_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_top = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+
+[node name="Time" type="Label" parent="CanvasLayer/VBoxContainer" groups=["Controls"]]
+margin_right = 173.0
+margin_bottom = 41.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme = ExtResource( 2 )
+custom_fonts/font = ExtResource( 1 )
+text = "00:00:00.00"
+align = 1
+
+[node name="Counter" type="Label" parent="CanvasLayer/VBoxContainer"]
+margin_top = 45.0
+margin_right = 173.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme = ExtResource( 2 )
+custom_fonts/font = ExtResource( 9 )
+text = "0"
+align = 1
+
+[node name="Menu" type="PanelContainer" parent="CanvasLayer" groups=["Controls"]]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -339.0
+margin_top = 120.0
+margin_right = -70.0
+margin_bottom = 470.0
+grow_horizontal = 0
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu"]
+margin_left = 4.0
+margin_top = 40.0
+margin_right = 265.0
+margin_bottom = 310.0
+custom_constants/separation = 0
+
+[node name="OptionsButton" type="TextureButton" parent="CanvasLayer" groups=["Controls"]]
+material = ExtResource( 14 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -156.0
+margin_bottom = 188.0
+toggle_mode = true
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 6 )
+texture_disabled = ExtResource( 8 )
+expand = true
+stretch_mode = 3
+
+[node name="SelectionBarValue" type="Label" parent="CanvasLayer" groups=["Controls"]]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_top = -186.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+theme = ExtResource( 2 )
+custom_fonts/font = ExtResource( 1 )
+text = "3 x 3"
+align = 1
+valign = 1
+
+[node name="MoveRightButton" type="TextureButton" parent="CanvasLayer" groups=["Buttons", "Controls"]]
+material = ExtResource( 14 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -156.0
+margin_top = -188.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+texture_disabled = ExtResource( 12 )
+expand = true
+stretch_mode = 3
+
+[node name="MoveLeftButton" type="TextureButton" parent="CanvasLayer" groups=["Buttons", "Controls"]]
+material = ExtResource( 14 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -188.0
+margin_right = 156.0
+grow_vertical = 0
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+texture_disabled = ExtResource( 12 )
+expand = true
+stretch_mode = 3
+flip_h = true
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="FxPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="pressed" from="CanvasLayer/BackButton" to="." method="BackButtonUp"]
+[connection signal="pressed" from="CanvasLayer/OptionsButton" to="." method="OptionsButtonUp"]
+[connection signal="pressed" from="CanvasLayer/MoveRightButton" to="." method="MoveRightButtonUp"]
+[connection signal="pressed" from="CanvasLayer/MoveLeftButton" to="." method="MoveLeftButtonUp"]

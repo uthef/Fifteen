@@ -11,16 +11,16 @@ config_version=4
 [application]
 
 config/name="Fifteen"
-run/main_scene="res://scenes/GameMenu.tscn"
-boot_splash/image="res://Logo.png"
+run/main_scene="res://Scenes/MenuScene.tscn"
+boot_splash/image="res://Images/UI/Splash.png"
 boot_splash/fullsize=false
-boot_splash/bg_color=Color( 0.0980392, 0.0980392, 0.0980392, 1 )
-config/icon="res://Fifteen.png"
+boot_splash/bg_color=Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+config/icon="res://Images/UI/Icon.png"
 config/quit_on_go_back=false
 
 [autoload]
 
-ClickPlayer="*res://Scripts/ClickPlayer.cs"
+SceneManager="*res://Scenes/SceneManager.tscn"
 
 [display]
 
@@ -28,28 +28,24 @@ window/size/width=720
 window/size/height=1280
 window/size/resizable=false
 window/size/always_on_top=true
+window/vsync/use_vsync=false
 window/handheld/orientation="portrait"
 
-[input]
+[input_devices]
 
-ui_click={
-"deadzone": 0.51,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
- ]
-}
+pointing/emulate_touch_from_mouse=true
 
 [physics]
 
-common/physics_fps=144
 common/enable_pause_aware_picking=true
+!process_map->has(p_pid)istrue.Returned:FAILED[rendering]quality/driver/driver_name="GLES2"
+threads/thread_model=2
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+environment/default_environment="res://default_env.tres"
 
 [rendering]
 
 quality/driver/driver_name="GLES2"
-threads/thread_model=2
-vram_compression/import_s3tc=false
-vram_compression/import_etc=true
-vram_compression/import_etc2=false
-gles2/compatibility/enable_high_float.Android=true
-environment/default_clear_color=Color( 0.0980392, 0.0980392, 0.0980392, 1 )
-environment/default_environment="res://default_env.tres"
+environment/default_clear_color=Color( 0.0784314, 0.0784314, 0.0784314, 1 )

@@ -1,0 +1,11 @@
+[config]
+
+name="FifteenPlugin"
+binary_type="local"
+binary="app-release.aar"
+
+[dependencies]
+
+local=[]
+remote=[]
+custom_maven_repos=[]

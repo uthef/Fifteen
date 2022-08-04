@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Glockenspiel.wav-cd5bca322d4bc1dc75d27adfa3a17a8e.sample"
+
+[deps]
+
+source_file="res://Audio/Glockenspiel.wav"
+dest_files=[ "res://.import/Glockenspiel.wav-cd5bca322d4bc1dc75d27adfa3a17a8e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
