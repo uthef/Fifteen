@@ -19,6 +19,14 @@
 script = ExtResource( 13 )
 MenuItemHeight = 120.0
 
+[node name="Settings" type="Node2D" parent="."]
+
+[node name="CheckButton" type="CheckButton" parent="Settings"]
+margin_left = 308.0
+margin_top = 435.0
+margin_right = 384.0
+margin_bottom = 475.0
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="BackButton" type="TextureButton" parent="CanvasLayer" groups=["Buttons"]]
@@ -41,7 +49,7 @@ size_flags_horizontal = 7
 size_flags_vertical = 4
 size_flags_stretch_ratio = 2.0
 
-[node name="Time" type="Label" parent="CanvasLayer/VBoxContainer" groups=["Controls"]]
+[node name="Time" type="Label" parent="CanvasLayer/VBoxContainer"]
 margin_right = 173.0
 margin_bottom = 41.0
 size_flags_horizontal = 3
@@ -51,7 +59,7 @@ custom_fonts/font = ExtResource( 1 )
 text = "00:00:00.00"
 align = 1
 
-[node name="Counter" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="Counter" type="Label" parent="CanvasLayer/VBoxContainer" groups=["Controls"]]
 margin_top = 45.0
 margin_right = 173.0
 margin_bottom = 96.0

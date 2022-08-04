@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 using Fifteen.Models;
 using Fifteen.Storage;
@@ -14,7 +15,6 @@ namespace Fifteen.Nodes
 
         public override void _Ready()
         {
-        
         }
 
         private void OnPolygonButtonPressed(string name)
@@ -36,7 +36,7 @@ namespace Fifteen.Nodes
                         new MenuItem(MenuItemType.Reset, "Reset")});
                     break;
                 case "SettingsButton":
-                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, null, null, null, true);
+                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, null, null, null, true, "Settings");
                     break;
             }
         }

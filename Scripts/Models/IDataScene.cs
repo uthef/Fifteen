@@ -8,5 +8,6 @@ namespace Fifteen.Models
         MenuItem[] MenuItems {get; set; }
         Vector2 Direction {get; set; }
         bool LimitedMode {get; set;}
+        string Title {get; set;}
     }
 }

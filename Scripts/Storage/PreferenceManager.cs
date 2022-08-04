@@ -76,14 +76,14 @@ namespace Fifteen.Storage
                 jsonArray.Add(new Array<float>());
                 for (int j = 0; j < array.GetLength(1); j++)
                 {
-                        jsonArray[i].Add((float) array[i, j]);
+                    jsonArray[i].Add((float) array[i, j]);
                 }
             }
 
             _prefs[key] = jsonArray;
         }
 
-        public T GetUnsafe<T>(T key)
+        public T GetUnsafe<T>(string key)
         {
             return (T) _prefs[key];
         }

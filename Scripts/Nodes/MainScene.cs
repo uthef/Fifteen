@@ -12,7 +12,8 @@ namespace Fifteen.Nodes
         public MenuItem[] MenuItems {get; set; }
         private bool _menuState = false, _menuButtonSelected = false;
         public Vector2 Direction {get; set; }
-        public bool LimitedMode {get; set; }
+        public bool LimitedMode {get; set; } = true;
+        public string Title {get; set;}
 
         // Nodes
         private Tween _tween;
@@ -63,6 +64,8 @@ namespace Fifteen.Nodes
             {
                 foreach (Node node in GetTree().GetNodesInGroup("Controls"))
                     node.QueueFree();
+
+                _timeLabel.Text = Title;
             }
             else InitializeMenu(_menu);
         }

@@ -1,8 +1,9 @@
 using Godot;
+using Godot.Collections;
 using System;
 using Fifteen.Models;
 using Fifteen.Storage;
-
+using Array = Godot.Collections.Array;
 namespace Fifteen.Nodes
 {
     public class FifteenPuzzle : Godot.Node2D
@@ -143,10 +144,16 @@ namespace Fifteen.Nodes
                         if (!_gameStarted)
                         {
                             _gameStarted = true;
+                            GlobalSettings.Preferences.Set2DIntArray("fifteen", _puzzle.AsArray());
                             if (_pauseTime.Ticks == 0) _startTime = TimeSpan.FromMilliseconds((long)OS.GetSystemTimeMsecs());
                             else ResumeTimer();
                         }
-                        GlobalSettings.Preferences.Set2DIntArray("fifteen", _puzzle.AsArray());
+                        else 
+                        {
+                            Array array = GlobalSettings.Preferences.GetUnsafe<Array>("fifteen");
+                            int oldColumn = sprite.Column - (int) direction.x, oldRow = sprite.Row - (int) direction.y;
+                            ((array[oldRow] as Array)[oldColumn], (array[sprite.Row] as Array)[sprite.Column]) = ((array[sprite.Row] as Array)[sprite.Column], (array[oldRow] as Array)[oldColumn]);
+                        }
 
                         break;
                     }

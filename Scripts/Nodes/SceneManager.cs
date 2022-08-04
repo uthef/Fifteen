@@ -78,7 +78,7 @@ namespace Fifteen.Nodes
             _sceneToBeRemoved = null;
         }
 
-        public void GoToScene(Node2D primaryScene, string secondaryScenePath, Vector2 movementDirection, string subScenePath = null, object[] data = null, MenuItem[] menuItems = null, bool limitedMode = false)
+        public void GoToScene(Node2D primaryScene, string secondaryScenePath, Vector2 movementDirection, string subScenePath = null, object[] data = null, MenuItem[] menuItems = null, bool limitedMode = false, string title = "Untitled")
         {
             var movement = movementDirection * GetViewport().Size;
 
@@ -93,6 +93,7 @@ namespace Fifteen.Nodes
                 dataScene.Data = data != null ? data : new object[0];
                 dataScene.Direction = -movementDirection;
                 dataScene.LimitedMode = limitedMode;
+                dataScene.Title = title;
             }
 
             if (subScenePath != null)
