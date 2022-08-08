@@ -2,6 +2,6 @@ namespace Fifteen.Theming
 {
     public enum PredefinedTheme
     {
-        Dark, Light
+        Auto = 0, Dark = 1, Light = 2
     }
 }

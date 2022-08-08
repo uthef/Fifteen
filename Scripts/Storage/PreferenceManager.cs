@@ -67,6 +67,11 @@ namespace Fifteen.Storage
             _prefs[key] = value;
         }
 
+        public Array GetArray(string key, Array defaultValue)
+        {
+            return _prefs.Contains(key) && _prefs[key] is Array value ? value : defaultValue;
+        }
+
         public void Set2DIntArray(string key, int[,] array)
         {
             Array<Array<float>> jsonArray = new Array<Array<float>>();
@@ -129,7 +134,7 @@ namespace Fifteen.Storage
 
         public void SetInt32(string key, int value)
         {
-            _prefs[key] = value;
+            _prefs[key] = (float) value;
         }
 
         public string GetString(string key, string defaultValue)

@@ -31,12 +31,12 @@ namespace Fifteen.Nodes
                         new MenuItem(MenuItemType.SwitchMode, "Switch to pictures", "Switch to numbers"),
                         new MenuItem(MenuItemType.ShowHideReference, "Show reference", "Hide reference")});
                     break;
-                case "SprucesButton":
-                        sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Down, null, null, new MenuItem[] {
+                case "RotacubeButton":
+                        sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Down, "res://Scenes/Rotacube.tscn", null, new MenuItem[] {
                         new MenuItem(MenuItemType.Reset, "Reset")});
                     break;
                 case "SettingsButton":
-                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, null, null, null, true, "Settings");
+                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, "res://Scenes/Settings.tscn", null, null, true, "Settings");
                     break;
             }
         }

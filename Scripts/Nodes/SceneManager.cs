@@ -17,6 +17,8 @@ namespace Fifteen.Nodes
         [Export] public Texture[] Confetti;
         public Texture[] Textures;
 
+        public Godot.Object Plugin;
+
         public bool IsTweenActive 
         {
             get => _tween.IsActive();
@@ -47,8 +49,43 @@ namespace Fifteen.Nodes
                     Textures[i] = imageTexture;
                 }
             }
+
+            
+            if (OS.GetName() == "Android")
+            {
+                Plugin = Engine.GetSingleton("FifteenPlugin");
+                Plugin.Connect("onConfigChanged", this, nameof(OnConfigurationChanged));
+            }
+
+            AudioServer.SetBusMute(0, Convert.ToBoolean(GlobalSettings.Preferences.GetInt32("mute_sounds", 0)));
+            GlobalSettings.CurrentTheme = ColorThemes.GetTheme((PredefinedTheme) GlobalSettings.Preferences.GetInt32("theme", 0), Plugin);
+            
+            UpdateTheme();
         }
 
+        private void OnConfigurationChanged(string nightMode)
+        {
+            if ((PredefinedTheme) GlobalSettings.Preferences.GetInt32("theme", 1) == PredefinedTheme.Auto && nightMode == "false")
+            {
+                GlobalSettings.CurrentTheme = new ColorThemes.Light();
+                UpdateTheme();
+            }
+        }
+
+        private void SelectorItemChanged(Selector node)
+        {
+            switch (node.PreferenceKey)
+            {
+                case "theme":
+                    GlobalSettings.CurrentTheme = ColorThemes.GetTheme((PredefinedTheme) node.Position);
+                    UpdateTheme();
+                    break;
+                case "mute_sounds":
+                    if (node.Position == 0) AudioServer.SetBusMute(0, false);
+                    else AudioServer.SetBusMute(0, true);
+                    break;
+            }
+        }
 
         public void UpdateTheme()
         {
@@ -70,6 +107,8 @@ namespace Fifteen.Nodes
             panelStyleBox.BorderColor = GlobalSettings.CurrentTheme.PanelStrokeColor;
             menuButtonStyleBox.Set("bg_color", GlobalSettings.CurrentTheme.ForegroundColor);
             menuButtonStyleBox.Set("border_color", GlobalSettings.CurrentTheme.PanelStrokeColor);
+
+            GlobalSettings.BlockFont = dynamicFont;
         }
 
         private void TweenAllCompleted()
@@ -78,7 +117,7 @@ namespace Fifteen.Nodes
             _sceneToBeRemoved = null;
         }
 
-        public void GoToScene(Node2D primaryScene, string secondaryScenePath, Vector2 movementDirection, string subScenePath = null, object[] data = null, MenuItem[] menuItems = null, bool limitedMode = false, string title = "Untitled")
+        public void GoToScene(Node2D primaryScene, string secondaryScenePath, Vector2 movementDirection, string subScenePath = null, object[] data = null, MenuItem[] menuItems = null, bool limitedMode = false, string title = "")
         {
             var movement = movementDirection * GetViewport().Size;
 
@@ -98,7 +137,13 @@ namespace Fifteen.Nodes
 
             if (subScenePath != null)
             {
-                secondaryScene.AddChild(GD.Load<PackedScene>(subScenePath).Instance());
+                var instance = GD.Load<PackedScene>(subScenePath).Instance();
+                if (instance is Container) 
+                {
+                    secondarySceneUI.AddChild(instance);
+                    secondarySceneUI.MoveChild(instance, 0);
+                }
+                else secondaryScene.AddChild(instance);
             }
 
             secondarySceneUI.Offset -= movement;

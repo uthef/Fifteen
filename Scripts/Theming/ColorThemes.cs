@@ -32,14 +32,22 @@ namespace Fifteen.Theming
             public float BlockFontOutline {get; set;} = 0f;
         }
 
-        public static IColorTheme GetTheme(PredefinedTheme theme)
+        public static IColorTheme GetTheme(PredefinedTheme theme, Object themePlugin = null)
         {
             switch (theme)
             {
                 case PredefinedTheme.Light:
                     return new Light();
-                default:
+                case PredefinedTheme.Dark:
                     return new Dark();
+                default:
+                    if (themePlugin != null)
+                    {
+                        string nightMode = (string) themePlugin.Call("isNightModeEnabled");
+                        if (nightMode == "false") return new Light();
+                        else return new Dark();
+                    }
+                    else return new Dark();
             }
         }
     }

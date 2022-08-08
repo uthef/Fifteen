@@ -26,10 +26,17 @@ SceneManager="*res://Scenes/SceneManager.tscn"
 
 window/size/width=720
 window/size/height=1280
-window/size/resizable=false
 window/size/always_on_top=true
 window/vsync/use_vsync=false
 window/handheld/orientation="portrait"
+
+[input]
+
+click={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
 
 [input_devices]
 
@@ -37,6 +44,7 @@ pointing/emulate_touch_from_mouse=true
 
 [physics]
 
+common/physics_fps=144
 common/enable_pause_aware_picking=true
 !process_map->has(p_pid)istrue.Returned:FAILED[rendering]quality/driver/driver_name="GLES2"
 threads/thread_model=2
@@ -49,3 +57,4 @@ environment/default_environment="res://default_env.tres"
 
 quality/driver/driver_name="GLES2"
 environment/default_clear_color=Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+quality/filters/msaa=2

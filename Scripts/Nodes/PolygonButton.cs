@@ -13,7 +13,7 @@ public class PolygonButton : TextureRect
 
     public override void _Ready()
     {
-        _tween = GetParent().GetNode<Tween>("Tween");
+        _tween = GetParent().GetNode<Tween>("../Tween");
         _poly = GetNode<Polygon2D>("Area2D/Polygon");
     }
 

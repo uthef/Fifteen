@@ -1,0 +1,95 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Themes/DynamicFonts/Default.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scenes/Selector.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Themes/Default.tres" type="Theme" id=4]
+
+[node name="GridContainer" type="GridContainer"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="Label" type="Label" parent="."]
+margin_top = 25.0
+margin_right = 253.0
+margin_bottom = 66.0
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "Mute sounds"
+
+[node name="Selector" parent="." instance=ExtResource( 2 )]
+margin_left = 426.0
+PreferenceKey = "mute_sounds"
+
+[node name="Label2" type="Label" parent="."]
+margin_top = 121.0
+margin_right = 253.0
+margin_bottom = 162.0
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "Color theme"
+
+[node name="Selector2" parent="." instance=ExtResource( 2 )]
+margin_left = 426.0
+margin_top = 96.0
+margin_bottom = 188.0
+PreferenceKey = "theme"
+_values = PoolStringArray( "Auto", "Dark", "Light" )
+
+[node name="Label3" type="Label" parent="."]
+margin_top = 220.0
+margin_right = 253.0
+margin_bottom = 261.0
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "Fiftteens solved"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_left = 637.0
+margin_top = 192.0
+margin_right = 688.0
+margin_bottom = 289.0
+size_flags_horizontal = 10
+custom_constants/margin_right = 32
+custom_constants/margin_top = 32
+custom_constants/margin_bottom = 24
+
+[node name="Label4" type="Label" parent="MarginContainer"]
+margin_top = 32.0
+margin_right = 19.0
+margin_bottom = 73.0
+size_flags_horizontal = 10
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "0"
+
+[node name="Label4" type="Label" parent="."]
+margin_top = 317.0
+margin_right = 253.0
+margin_bottom = 358.0
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "Pictures collected"
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+margin_left = 590.0
+margin_top = 293.0
+margin_right = 688.0
+margin_bottom = 382.0
+size_flags_horizontal = 10
+custom_constants/margin_right = 32
+custom_constants/margin_top = 24
+custom_constants/margin_bottom = 24
+
+[node name="Label4" type="Label" parent="MarginContainer2"]
+margin_top = 24.0
+margin_right = 66.0
+margin_bottom = 65.0
+size_flags_horizontal = 10
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "0/10"
