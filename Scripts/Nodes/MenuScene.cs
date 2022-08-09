@@ -36,7 +36,7 @@ namespace Fifteen.Nodes
                         new MenuItem(MenuItemType.Reset, "Reset")});
                     break;
                 case "SettingsButton":
-                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, "res://Scenes/Settings.tscn", null, null, true, "Settings");
+                    sceneManager.GoToScene(this, "res://Scenes/MainScene.tscn", Vector2.Up, "res://Scenes/Settings.tscn", null, null, true, "Options");
                     break;
             }
         }

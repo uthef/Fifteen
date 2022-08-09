@@ -26,6 +26,7 @@ SceneManager="*res://Scenes/SceneManager.tscn"
 
 window/size/width=720
 window/size/height=1280
+window/size/resizable=false
 window/size/always_on_top=true
 window/vsync/use_vsync=false
 window/handheld/orientation="portrait"
@@ -56,5 +57,7 @@ environment/default_environment="res://default_env.tres"
 [rendering]
 
 quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
 environment/default_clear_color=Color( 0.0784314, 0.0784314, 0.0784314, 1 )
 quality/filters/msaa=2

@@ -93,3 +93,30 @@ size_flags_horizontal = 10
 theme = ExtResource( 4 )
 custom_fonts/font = ExtResource( 1 )
 text = "0/10"
+
+[node name="Label5" type="Label" parent="."]
+margin_top = 410.0
+margin_right = 253.0
+margin_bottom = 451.0
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "Rotacube levels"
+
+[node name="MarginContainer3" type="MarginContainer" parent="."]
+margin_left = 590.0
+margin_top = 386.0
+margin_right = 688.0
+margin_bottom = 475.0
+size_flags_horizontal = 10
+custom_constants/margin_right = 32
+custom_constants/margin_top = 24
+custom_constants/margin_bottom = 24
+
+[node name="Label4" type="Label" parent="MarginContainer3"]
+margin_top = 24.0
+margin_right = 66.0
+margin_bottom = 65.0
+size_flags_horizontal = 10
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
+text = "0/15"

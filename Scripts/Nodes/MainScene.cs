@@ -1,6 +1,7 @@
 using Godot;
 using Fifteen.Models;
 using Fifteen.Storage;
+using System;
 using Array = Godot.Collections.Array;
 
 namespace Fifteen.Nodes
@@ -28,6 +29,7 @@ namespace Fifteen.Nodes
         public TextureButton MoveLeftButton, MoveRightButton;
         public event IconUp OnMoveLeftButtonUp, OnMoveRgihtButtonUp, OnOptionsButtonUp;
         public event MenuItemSelected OnMenuItemSelected;
+        public event EventHandler OnAnyButtonDown, OnAnyButtonUp;
         public delegate void UIStateChange(bool blocked);
         public event UIStateChange OnUIStateChange;
         float menuAnimationDuration = .25f;
@@ -190,6 +192,16 @@ namespace Fifteen.Nodes
                 ShowMenu();
                 OnOptionsButtonUp?.Invoke(null, null);
             }
+        }
+
+        private void AnyButtonDown()
+        {
+            OnAnyButtonDown?.Invoke(this, new EventArgs());
+        }
+
+        private void AnyButtonUp()
+        {
+            OnAnyButtonUp?.Invoke(this, new EventArgs());
         }
 
         private void MoveLeftButtonUp()
