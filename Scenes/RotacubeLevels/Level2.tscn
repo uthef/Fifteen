@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Block3D.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Nodes/RotacubeLevel.cs" type="Script" id=2]
+
+[node name="Spatial" type="Spatial"]
+script = ExtResource( 2 )
+Color = Color( 0.223529, 0.376471, 0.792157, 1 )
+
+[node name="Block" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.8, 0 )
+
+[node name="Block2" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.8, 0 )
+
+[node name="Block3" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.8, 0.4 )
+
+[node name="Block4" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.8, 0.4 )
+
+[node name="Block5" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, -0.5, -0.8, 0.2 )
+
+[node name="Block6" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -0.75, 0, 1, 0, 0.25, 0, -3.27835e-08, -0.85, -0.8, 0.2 )
+
+[node name="Block11" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, 0.8, -0.8, 0.2 )
+
+[node name="Block16" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, 0.8, 0.25, 0.2 )
+
+[node name="Block17" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, -0.8, 0.25, 0.2 )
+
+[node name="Block18" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, -0.8, 0.8, 0.2 )
+
+[node name="Block19" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -1, 0, 1, 0, 0.25, 0, -4.37114e-08, 0.8, 0.8, 0.2 )
+
+[node name="Block12" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -0.75, 0, 1, 0, 0.25, 0, -3.27835e-08, 0.45, -0.8, 0.2 )
+
+[node name="Block7" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( -1.09278e-08, 0, -3, 0, 1, 0, 0.25, 0, -1.31134e-07, -1.11759e-08, -0.8, -0.35 )
+
+[node name="Block8" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -1.31134e-07, 1.09278e-08, -4.37114e-08, 3, -1.09278e-08, -1, -1.31134e-07, 0, -0.4, -0.6 )
+
+[node name="Block9" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -1.31134e-07, 1.09278e-08, -4.37114e-08, 3, -1.09278e-08, -1, -1.31134e-07, 0.55, -0.4, -0.6 )
+
+[node name="Block20" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -1.31134e-07, 1.09278e-08, -4.37114e-08, 3, -1.09278e-08, -1, -1.31134e-07, 0.75, -0.4, 0.45 )
+
+[node name="Block21" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -1.31134e-07, 1.09278e-08, -4.37114e-08, 3, -1.09278e-08, -1, -1.31134e-07, -0.75, -0.4, 0.45 )
+
+[node name="Block10" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -1.31134e-07, 1.09278e-08, -4.37114e-08, 3, -1.09278e-08, -1, -1.31134e-07, -0.55, -0.4, -0.6 )
+
+[node name="Block13" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0, -4.37114e-08, 3, -0.25, 4.37114e-08, 0, -1.09278e-08, -1, -1.31134e-07, -5.96046e-08, 0.25, -5.96046e-08 )
+
+[node name="Block22" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0, -4.37114e-08, 3, -0.25, 4.37114e-08, 0, -1.09278e-08, -1, -1.31134e-07, -5.96046e-08, 0.25, -0.6 )
+
+[node name="Block14" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -3.3437e-15, 0, -4.37114e-08, 1.75, -1.09278e-08, -1, -7.64949e-08, -5.96046e-08, 0.65, -5.96046e-08 )
+
+[node name="Block23" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -3.3437e-15, 0, -4.37114e-08, 1.75, -1.09278e-08, -1, -7.64949e-08, -5.96046e-08, 0.65, -0.4 )
+
+[node name="Block24" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -3.3437e-15, 0, -4.37114e-08, 1.75, -1.09278e-08, -1, -7.64949e-08, -5.96046e-08, 0.65, 0.4 )
+
+[node name="Block25" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0.25, -4.37114e-08, -3.3437e-15, 0, -4.37114e-08, 1.75, -1.09278e-08, -1, -7.64949e-08, -5.96046e-08, 0.65, 0.8 )
+
+[node name="Block15" type="KinematicBody" parent="." groups=["Blocks"] instance=ExtResource( 1 )]
+transform = Transform( 0, -4.37114e-08, 3, -0.25, 4.37114e-08, 0, -1.09278e-08, -1, -1.31134e-07, -5.96046e-08, 0.25, 0.4 )

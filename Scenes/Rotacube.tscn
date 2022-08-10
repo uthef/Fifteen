@@ -1,20 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Audio/RetroCoin.wav" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Nodes/Rotacube.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/Nodes/Ball.cs" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
 flip_faces = true
 
 [sub_resource type="BoxShape" id=6]
 extents = Vector3( 0.0970053, 1, 1 )
-
-[sub_resource type="Environment" id=11]
-background_energy = 0.0
-ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 0.2
-glow_intensity = 2.22
-glow_bloom = 0.29
 
 [sub_resource type="PhysicsMaterial" id=7]
 friction = 0.2
@@ -29,6 +23,13 @@ uv1_scale = Vector3( 1.003, 1, 1 )
 
 [sub_resource type="SphereShape" id=8]
 radius = 0.199719
+
+[sub_resource type="Environment" id=11]
+background_energy = 0.0
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.2
+glow_intensity = 2.22
+glow_bloom = 0.29
 
 [node name="ViewportContainer" type="ViewportContainer"]
 anchor_right = 1.0
@@ -81,19 +82,14 @@ shape = SubResource( 6 )
 transform = Transform( 4.37114e-08, 1.50996e-07, -1, -8.74228e-08, -1, -1.50996e-07, -1, 8.74228e-08, -4.37114e-08, -4.7973e-08, 9.5946e-08, 1.09749 )
 shape = SubResource( 6 )
 
-[node name="Camera" type="Camera" parent="Viewport"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.141 )
-environment = SubResource( 11 )
-
 [node name="Ball" type="RigidBody" parent="Viewport"]
 collision_layer = 3
 collision_mask = 3
 mass = 0.510204
 physics_material_override = SubResource( 7 )
-gravity_scale = 3.0
+gravity_scale = 1.5
 continuous_cd = true
-contacts_reported = 2
-contact_monitor = true
+script = ExtResource( 3 )
 
 [node name="Sphere" type="MeshInstance" parent="Viewport/Ball"]
 mesh = SubResource( 3 )
@@ -101,6 +97,10 @@ material/0 = SubResource( 10 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Viewport/Ball"]
 shape = SubResource( 8 )
+
+[node name="Camera" type="Camera" parent="Viewport"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.141 )
+environment = SubResource( 11 )
 
 [node name="SpotLight" type="SpotLight" parent="Viewport"]
 transform = Transform( 0.969663, 0.157412, -0.187014, -0.0204147, 0.814536, 0.579754, 0.24359, -0.558348, 0.793039, -0.998194, 2.92833, 4.11635 )

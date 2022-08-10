@@ -23,7 +23,7 @@ namespace Fifteen.Nodes
         TimeSpan _pauseTime = new TimeSpan(0), _startTime = new TimeSpan(0);
         private int _moves = 0, _pictureIndex;
         public bool GameActive {get; private set; } = false;
-        private bool _gameStarted = false, _pictureMode = false, _animated = false, _imageRestored = false, _hueRestored, _complteted;
+        private bool _gameStarted = false, _pictureMode = false, _animated = false, _imageRestored = false, _hueRestored, _completed, _ref = false;
 
         private PackedScene _blockScene;
 
@@ -120,7 +120,7 @@ namespace Fifteen.Nodes
         {
             if (_imageReference.Modulate.a > 0)
             {
-                if (Input.IsMouseButtonPressed(1) && new Rect2(_imageReference.GlobalPosition, _imageReference.RegionRect.Size).HasPoint(GetGlobalMousePosition()))
+                if (Input.IsActionJustReleased("click") && new Rect2(_imageReference.GlobalPosition, _imageReference.RegionRect.Size).HasPoint(GetGlobalMousePosition()) && !_ref)
                 {
                     _tween.InterpolateProperty(_imageReference, "modulate", _imageReference.Modulate, new Color(_imageReference.Modulate, 0f), .25f);
                     _tween.Start();
@@ -181,7 +181,7 @@ namespace Fifteen.Nodes
         private void GeneratePuzzle(bool predefined = false)
         {    
             SetProcess(false);
-            _complteted = false;
+            _completed = false;
 
             if (_imageReference.Modulate.a > 0) _imageReference.Modulate = new Color(_imageReference.Modulate, 0);
 
@@ -344,13 +344,17 @@ namespace Fifteen.Nodes
                 _impactPlayer.PitchScale = (float) GD.RandRange(0.9, 1.1);
                 _impactPlayer.Play();
             }
+            else if (node is Sprite)
+            {
+                _ref = false;
+            }
         }
 
         private void TweenAllCompleted()
         {
-            if (GlobalSettings.Preferences.GetBool("f_completed", false) && !_complteted)
+            if (GlobalSettings.Preferences.GetBool("f_completed", false) && !_completed)
             {
-                _complteted = true;
+                _completed = true;
                 if (_pictureMode)
                 {
                     _tween.InterpolateProperty(_imageReference, "modulate", _imageReference.Modulate, new Color(_imageReference.Modulate, 1f), .25f);
@@ -486,6 +490,7 @@ namespace Fifteen.Nodes
                     _animator.Play("FadeOut");
                     break;
                 case MenuItemType.ShowHideReference:
+                        _ref = true;
                         _tween.InterpolateProperty(_imageReference, "modulate", _imageReference.Modulate, new Color(_imageReference.Modulate, _imageReference.Modulate.a > 0f ? 0f : 1f), .25f);
                         _tween.Start();
                     break;

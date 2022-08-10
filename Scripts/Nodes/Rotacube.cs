@@ -24,7 +24,7 @@ namespace Fifteen.Nodes
         private const string LevelMask = "Level {0}", CoinMask = "{0} / {1}";
 
         private int _coins = 0, _maxCoins = 0;
-        private Spatial _currentLevel;
+        private RotacubeLevel _currentLevel;
 
         [Signal] public delegate void CoinCollected();
         public delegate void LabelValueChangeEventHandler(SceneLabel label, object value);
@@ -70,18 +70,20 @@ namespace Fifteen.Nodes
         {
             try 
             {
-            if (_currentLevel != null) _cube.RemoveChild(_currentLevel);
-            var scene = GD.Load<PackedScene>($"res://Scenes/RotacubeLevels/Level{_level}.tscn");
-            _currentLevel = scene.Instance<Spatial>();
-            _cube.AddChild(_currentLevel);
+                if (_currentLevel != null) _cube.RemoveChild(_currentLevel);
+                var scene = GD.Load<PackedScene>($"res://Scenes/RotacubeLevels/Level{_level}.tscn");
+                _currentLevel = scene.Instance<RotacubeLevel>();
+                _cube.AddChild(_currentLevel);
 
-            _coins = 0;
-            LabelValueChange.Invoke(SceneLabel.Counter, string.Format(CoinMask, 0, _maxCoins = GetTree().GetNodesInGroup("Coins").Count));
+                _coins = 0;
+                LabelValueChange.Invoke(SceneLabel.Counter, string.Format(CoinMask, 0, _maxCoins = GetTree().GetNodesInGroup("Coins").Count));
 
-            _cube.Rotation = _cube.Translation = Vector3.Zero;
-            _ball.Mode = RigidBody.ModeEnum.Static;
-            _ball.Translation = _ball.LinearVelocity = _ball.Rotation =  Vector3.Zero;
-            _ball.Mode = RigidBody.ModeEnum.Rigid;
+                _ball.GetNode<MeshInstance>("Sphere").GetActiveMaterial(0).Set("albedo_color", _currentLevel.Color);
+
+                _cube.Rotation = _cube.Translation = Vector3.Zero;
+                _ball.Mode = RigidBody.ModeEnum.Static;
+                _ball.Translation = _ball.LinearVelocity = _ball.Rotation =  Vector3.Zero;
+                _ball.Mode = RigidBody.ModeEnum.Rigid;
             }
             catch {}
         }
@@ -133,22 +135,22 @@ namespace Fifteen.Nodes
             if (_rotating)
             {
                 _rotation = GetViewport().GetMousePosition();
-                _cube.RotateX((_rotation.y - _mouseStartPosition.y) * .3f * delta);
-                _cube.RotateY((_rotation.x - _mouseStartPosition.x) * .3f * delta);
+                _cube.RotateX((_rotation.y - _mouseStartPosition.y) * .15f * delta);
+                _cube.RotateY((_rotation.x - _mouseStartPosition.x) * .15f * delta);
                 _mouseStartPosition = _rotation;
             }
         }
 
         private void On_CoinCollected()
         {
-            LabelValueChange.Invoke(SceneLabel.Counter, string.Format(CoinMask, ++_coins, _maxCoins));
+            LabelValueChange?.Invoke(SceneLabel.Counter, string.Format(CoinMask, ++_coins, _maxCoins));
             if (GetTree().GetNodesInGroup("Coins").Count == 0) OnLevelCompleted();
             _player.Play();
         }
 
         private void OnLevelCompleted()
         {
-            if (_level >= _levels.Count) 
+            if (_levels != null && _level >= _levels.Count) 
             {
                 _levels.Add(0);
                 GlobalSettings.Preferences.SaveData();
